@@ -9,7 +9,7 @@ Plugin 'VundleVim/Vundle.vim'
 " 你的所有插件需要在下面这行之前
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
-Plugin 'Xuyuanp/nerdtree-git-plugin'
+" Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'Shougo/neocomplete.vim'
@@ -180,6 +180,19 @@ nmap <silent> <F3> <Leader>ig; " F3 开启关闭对齐线
 let g:indent_guides_guide_size=1 " 设置对期限宽度
 
 " vim-multiple-cursors 配置
+" Called once right before you start selecting multiple cursors
+function! Multiple_cursors_before()
+  if exists(':NeoCompleteLock')==2
+    exe 'NeoCompleteLock'
+  endif
+endfunction
+
+" Called once only when the multiple selection is canceled (default <Esc>)
+function! Multiple_cursors_after()
+  if exists(':NeoCompleteUnlock')==2
+    exe 'NeoCompleteUnlock'
+  endif
+endfunction
 set selection=inclusive
 
 " 彩虹括号
@@ -187,7 +200,7 @@ let g:rainbow_active = 1
 let g:rainbow_conf = {'guifgs': ['red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'purple'], 'ctermfgs': ['red', 'darkyellow', 'yellow', 'green', 'cyan', 'blue', 'darkmagenta'],}
 
 " 代码检查
-let g:ale_statusline_format = ['%d E', '%d W', '']
+let g:ale_statusline_format = ['✘%d', '!%d', '']
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 1
 let g:ale_linters = {'python': ['flake8']}
