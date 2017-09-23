@@ -9,6 +9,7 @@ Plugin 'VundleVim/Vundle.vim'
 " 你的所有插件需要在下面这行之前
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
+Plugin 'tpope/vim-fireplace'
 " Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'altercation/vim-colors-solarized'
@@ -93,9 +94,12 @@ function MyTabLabel(n)
     let buflist = tabpagebuflist(a:n)
     let winnr = tabpagewinnr(a:n)
     let result = a:n . ":" . bufname(buflist[winnr - 1])
-    if getbufvar(buflist[winnr - 1], "&modified")
-        let result .= "+"
-    endif
+    for bufnr in buflist
+        if getbufvar(bufnr, "&modified")
+            let result .= "+"
+            break
+        endif
+    endfor
     return result
 endfunction
 " 标签栏控制
@@ -209,6 +213,8 @@ let g:ale_sign_warning = '>>'
 highlight SignColumn ctermbg=none
 highlight link ALEErrorSign Constant
 highlight link ALEWarningSign LineNr
+nmap <silent> <Leader>ep <Plug>(ale_previous_wrap) " 跳转到上一个错误
+nmap <silent> <Leader>en <Plug>(ale_next_wrap) " 跳转到下一个错误
 
 " 自动补全配置
 set completeopt-=preview " 自动补全的时候不显示预览窗口
