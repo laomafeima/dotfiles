@@ -78,6 +78,7 @@ autocmd cursorhold * set nohlsearch
 noremap n :set hlsearch<cr>n
 noremap N :set hlsearch<cr>N
 noremap / :set hlsearch<cr>/
+noremap :/ :set hlsearch<cr>:/
 noremap ? :set hlsearch<cr>?
 noremap * *:set hlsearch<cr>
 noremap # #:set hlsearch<cr>
