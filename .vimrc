@@ -58,6 +58,9 @@ au FileType qf setlocal nonumber colorcolumn=0 " 设置QuickFix 里面不显示8
 hi ColorColumn ctermbg=darkgray guibg=darkgray " 设置80 列 线的颜色
 set statusline=%<%n\ %f\ %m%r%h%w%{(&fenc!=''?&fenc:&enc).':'.&ff}\ %LL\ %Y%=%{ALEGetStatusLine()}\ %l,%v\ %p%%\ " 设置状态栏显示项目
 hi VertSplit  cterm=NONE term=NONE gui=NONE " 设置分屏线样式
+" 修改 Markdown 文件中 单个 '_' 高亮的问题
+au FileType MARKDOWN syn clear markdownError
+au FileType MARKDOWN syn match markdownErrorNotDisplay "\w\@<=_\w\@="
 
 if has('gui_running')
     set guioptions-=T " 隐藏菜单栏
@@ -91,7 +94,7 @@ hi Pmenu guibg=darkslategray ctermbg=darkgray " 下拉菜单的颜色
 
 " 自定义标签栏显示样式
 " 标签控制
-function MyTabLabel(n)
+function! MyTabLabel(n)
     let buflist = tabpagebuflist(a:n)
     let winnr = tabpagewinnr(a:n)
     let result = a:n . ":" . bufname(buflist[winnr - 1])
@@ -104,7 +107,7 @@ function MyTabLabel(n)
     return result
 endfunction
 " 标签栏控制
-function MyTabLine()
+function! MyTabLine()
     let s = ''
     for i in range(tabpagenr('$'))
         if i + 1 == tabpagenr()
@@ -205,7 +208,7 @@ let g:rainbow_active = 1
 let g:rainbow_conf = {'guifgs': ['red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'purple'], 'ctermfgs': ['red', 'darkyellow', 'yellow', 'green', 'cyan', 'blue', 'darkmagenta'],}
 
 " 代码检查
-let g:ale_statusline_format = ['✘%d', '!%d', '']
+let g:ale_statusline_format = ['✘%d', '!%d', '✔']
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 1
 let g:ale_linters = {'python': ['flake8']}
