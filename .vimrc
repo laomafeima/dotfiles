@@ -154,10 +154,10 @@ inoremap <silent><s-tab> <ESC>:tabnext<CR>
 " map <C-l> <C-W>l
 
 " 关闭方向键, 强迫自己用 hjkl
-map <Left> <Nop>
-map <Right> <Nop>
-map <Up> <Nop>
-map <Down> <Nop>
+map <Left> :echoe "Use 'h'"<CR>
+map <Right> :echoe "Use 'l'"<CR>
+map <Up> :echoe "Use 'j'"<CR>
+map <Down> :echoe "Use 'k'"<CR>
 
 " NerdTree 配置
 nmap <silent> <F2> :NERDTreeToggle<CR>; " F2 开启和关闭 NERDTree
