@@ -21,6 +21,7 @@ Plugin 'luochen1990/rainbow'
 Plugin 'skywind3000/asyncrun.vim'
 Plugin 'w0rp/ale'
 Plugin 'easymotion/vim-easymotion'
+Plugin 'haya14busa/incsearch.vim'
 Plugin 'rking/ag.vim'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'christoomey/vim-tmux-navigator'
@@ -86,6 +87,11 @@ noremap ? :set hlsearch<cr>?
 noremap * *:set hlsearch<cr>
 noremap # #:set hlsearch<cr>
 
+" incsearch 配置
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+
 " 进入插入模式时改变状态栏颜色（仅限于Vim 7）
 au InsertEnter * hi StatusLine guibg=darkred guifg=darkgray gui=none ctermbg=red ctermfg=black cterm=none
 au InsertLeave * hi StatusLine guibg=darkgreen guifg=darkgray gui=none ctermbg=green ctermfg=black cterm=none
@@ -106,6 +112,7 @@ function! MyTabLabel(n)
     endfor
     return result
 endfunction
+
 " 标签栏控制
 function! MyTabLine()
     let s = ''
@@ -159,6 +166,22 @@ map <Right> :echoe "Use 'l'"<CR>
 map <Up> :echoe "Use 'j'"<CR>
 map <Down> :echoe "Use 'k'"<CR>
 
+" easymotion 配置 
+
+map <Leader>f <Plug>(easymotion-f)
+map <Leader>w <Plug>(easymotion-w)
+map <Leader>b <Plug>(easymotion-b)
+nmap s <Plug>(easymotion-s2)
+" hjkl
+map <Leader>l <Plug>(easymotion-lineforward)
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+map <Leader>h <Plug>(easymotion-linebackward)
+" repeat motions
+map <leader><leader>. <Plug>(easymotion-repeat)
+
+
+
 " NerdTree 配置
 nmap <silent> <F2> :NERDTreeToggle<CR>; " F2 开启和关闭 NERDTree
 let NERDTreeShowBookmarks=1 " 默认显示书签
@@ -208,7 +231,11 @@ let g:rainbow_active = 1
 let g:rainbow_conf = {'guifgs': ['red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'purple'], 'ctermfgs': ['red', 'darkyellow', 'yellow', 'green', 'cyan', 'blue', 'darkmagenta'],}
 
 " 代码检查
+if has("mac")
 let g:ale_statusline_format = ['✘%d', '!%d', '✔']
+else
+let g:ale_statusline_format = ['E:%d', 'W:%d', 'OK']
+endif
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 1
 let g:ale_linters = {'python': ['flake8']}
