@@ -38,7 +38,6 @@ syntax on " 开启语法高亮
 filetype on " 自动检测文件类型
 filetype plugin on " 插件支持文件类型
 set t_Co=256 " 开启256色
-set background="dark"
 set fileencodings=utf-8,gbk,cp936,ucs-bom,utf8"文件编码
 set fileformat=unix " 设置文件的兼容格式为unix，避免换行符问题
 set tabstop=4 " tab 的宽度
@@ -56,7 +55,6 @@ set laststatus=2 " 默认显示状态栏
 set ruler " 在编辑过程中，在右下角显示光标位置的状态行
 set cc=80  " 设置 80 列显示线 
 au FileType qf setlocal nonumber colorcolumn=0 " 设置QuickFix 里面不显示80列线和行号
-hi ColorColumn ctermbg=darkgray guibg=darkgray " 设置80 列 线的颜色
 set statusline=%<%n\ %f\ %m%r%h%w%{(&fenc!=''?&fenc:&enc).':'.&ff}\ %LL\ %Y%=%{ALEGetStatusLine()}\ %l,%v\ %p%%\ " 设置状态栏显示项目
 hi VertSplit  cterm=NONE term=NONE gui=NONE " 设置分屏线样式
 " 修改 Markdown 文件中 单个 '_' 高亮的问题
@@ -96,7 +94,18 @@ map g/ <Plug>(incsearch-stay)
 au InsertEnter * hi StatusLine guibg=darkred guifg=darkgray gui=none ctermbg=red ctermfg=black cterm=none
 au InsertLeave * hi StatusLine guibg=darkgreen guifg=darkgray gui=none ctermbg=green ctermfg=black cterm=none
 hi StatusLine guibg=darkgreen guifg=darkgray gui=none ctermbg=green ctermfg=black cterm=none " 默认状态栏颜色
-hi Pmenu guibg=darkslategray ctermbg=darkgray " 下拉菜单的颜色
+
+" Switch light and dark
+if &background ==? 'dark'
+    set background="dark"
+    hi ColorColumn ctermbg=darkgray guibg=darkgray " 设置80 列 线的颜色
+    hi Pmenu guibg=darkslategray ctermbg=darkgray " 下拉菜单的颜色
+else
+    hi ColorColumn ctermbg=lightgray guibg=darkgray " 设置80 列 线的颜色
+    hi Pmenu guibg=darkslategray ctermbg=lightgray " 下拉菜单的颜色
+    hi PmenuSel ctermfg=white ctermbg=gray guibg=Grey
+endif
+
 
 " 自定义标签栏显示样式
 " 标签控制
