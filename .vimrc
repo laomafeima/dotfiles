@@ -115,8 +115,7 @@ function! MyTabLabel(n)
     let result = a:n . ":" . bufname(buflist[winnr - 1])
     for bufnr in buflist
         if getbufvar(bufnr, "&modified")
-            let result .= "+"
-            break
+            let result .= (bufnr == buflist[winnr - 1] ? "+" : "~")
         endif
     endfor
     return result
