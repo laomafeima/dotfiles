@@ -112,7 +112,7 @@ endif
 function! MyTabLabel(n)
     let buflist = tabpagebuflist(a:n)
     let winnr = tabpagewinnr(a:n)
-    let result = a:n . ":" . bufname(buflist[winnr - 1])
+    let result = a:n . ":" . (bufname(buflist[winnr - 1]) == "" ? "[No Name]" : bufname(buflist[winnr - 1]))
     for bufnr in buflist
         if getbufvar(bufnr, "&modified")
             let result .= (bufnr == buflist[winnr - 1] ? "+" : "~")
