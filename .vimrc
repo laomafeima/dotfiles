@@ -25,7 +25,6 @@ Plugin 'haya14busa/incsearch.vim'
 Plugin 'rking/ag.vim'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'christoomey/vim-tmux-navigator'
-Plugin 'wincent/terminus'
 Plugin 'laomafeima/f5'
 
 call vundle#end()            " 必须
@@ -65,43 +64,37 @@ if has('gui_running')
     set guioptions-=r " 隐藏右侧滚动条
     " 使用命令行下标签页样式
     set guioptions-=e
-    colorscheme solarized "主题
     "set guifont=Consolas,Menlo " 设置字体
     " hi CursorLine cterm=NONE ctermbg=DarkGray ctermfg=NONE guibg=NONE guifg=NONE " 设置高亮显示的颜色
     set lines=30 columns=110 " 设置启动时窗口大小
 endif
 
-" 当光标一段时间保持不动了，就禁用高亮
-autocmd cursorhold * set nohlsearch
-" " 当输入查找命令时，再启用高亮
-noremap n :set hlsearch<cr>n
-noremap N :set hlsearch<cr>N
-noremap / :set hlsearch<cr>/
-noremap :/ :set hlsearch<cr>:/
-noremap ? :set hlsearch<cr>?
-noremap * *:set hlsearch<cr>
-noremap # #:set hlsearch<cr>
+" 设置 Y 为复制到系统粘贴板
+vnoremap Y "*y
+nnoremap Y "*yy 
+nnoremap P "*p
 
 " incsearch 配置
 map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
+let g:incsearch#auto_nohlsearch = 1
+map n  <Plug>(incsearch-nohl-n)
+map N  <Plug>(incsearch-nohl-N)
+map *  <Plug>(incsearch-nohl-*)
+map #  <Plug>(incsearch-nohl-#)
+map g* <Plug>(incsearch-nohl-g*)
+map g# <Plug>(incsearch-nohl-g#)
 
 " 进入插入模式时改变状态栏颜色（仅限于Vim 7）
-au InsertEnter * hi StatusLine guibg=darkred guifg=darkgray gui=none ctermbg=red ctermfg=black cterm=none
-au InsertLeave * hi StatusLine guibg=darkgreen guifg=darkgray gui=none ctermbg=green ctermfg=black cterm=none
-hi StatusLine guibg=darkgreen guifg=darkgray gui=none ctermbg=green ctermfg=black cterm=none " 默认状态栏颜色
+au InsertEnter * hi StatusLine guibg=red guifg=black gui=none ctermbg=red ctermfg=black cterm=none
+au InsertLeave * hi StatusLine guibg=green guifg=black gui=none ctermbg=green ctermfg=black cterm=none
+hi StatusLine guibg=green guifg=black gui=none ctermbg=green ctermfg=black cterm=none " 默认状态栏颜色
 
-" Switch light and dark
-if &background ==? 'dark'
-    set background="dark"
-    hi ColorColumn ctermbg=darkgray guibg=darkgray " 设置80 列 线的颜色
-    hi Pmenu guibg=darkslategray ctermbg=darkgray " 下拉菜单的颜色
-else
-    hi ColorColumn ctermbg=lightgray guibg=darkgray " 设置80 列 线的颜色
-    hi Pmenu guibg=darkslategray ctermbg=lightgray " 下拉菜单的颜色
-    hi PmenuSel ctermfg=white ctermbg=gray guibg=Grey
-endif
+" 设置菜单颜色
+hi ColorColumn ctermbg=lightgray guibg=darkgray " 设置80 列 线的颜色
+hi Pmenu guibg=darkslategray ctermbg=lightgray " 下拉菜单的颜色
+hi PmenuSel ctermfg=white ctermbg=gray guibg=Grey
 
 
 " 自定义标签栏显示样式
