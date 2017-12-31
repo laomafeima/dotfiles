@@ -71,7 +71,7 @@ endif
 
 " 设置 Y 为复制到系统粘贴板
 vnoremap Y "*y
-nnoremap Y "*yy 
+nnoremap Y "*yy
 nnoremap P "*p
 
 " incsearch 配置
@@ -164,21 +164,6 @@ map <Right> :echoe "Use 'l'"<CR>
 map <Up> :echoe "Use 'j'"<CR>
 map <Down> :echoe "Use 'k'"<CR>
 
-" easymotion 配置 
-
-map <Leader>f <Plug>(easymotion-f)
-map <Leader>w <Plug>(easymotion-w)
-map <Leader>b <Plug>(easymotion-b)
-nmap s <Plug>(easymotion-s2)
-" hjkl
-map <Leader>l <Plug>(easymotion-lineforward)
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
-map <Leader>h <Plug>(easymotion-linebackward)
-" repeat motions
-map <leader><leader>. <Plug>(easymotion-repeat)
-
-
 
 " NerdTree 配置
 nmap <silent> <F2> :NERDTreeToggle<CR>; " F2 开启和关闭 NERDTree
@@ -202,6 +187,19 @@ let g:EasyMotion_use_upper = 1
 let g:EasyMotion_smartcase = 1
 " Smartsign (type `3` and match `3`&`#`)
 let g:EasyMotion_use_smartsign_jp = 1
+
+" easymotion 配置 
+map <Leader>f <Plug>(easymotion-f)
+map <Leader>w <Plug>(easymotion-w)
+map <Leader>b <Plug>(easymotion-b)
+nmap s <Plug>(easymotion-s2)
+" hjkl
+map <Leader>l <Plug>(easymotion-lineforward)
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+map <Leader>h <Plug>(easymotion-linebackward)
+" repeat motions
+map <leader><leader>. <Plug>(easymotion-repeat)
 
 " vim-indent-guides 配置
 nmap <silent> <F3> <Leader>ig; " F3 开启关闭对齐线
