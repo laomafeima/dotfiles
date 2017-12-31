@@ -94,7 +94,7 @@ hi StatusLine guibg=green guifg=black gui=none ctermbg=green ctermfg=black cterm
 " 设置菜单颜色
 hi ColorColumn ctermbg=lightgray guibg=darkgray " 设置80 列 线的颜色
 hi Pmenu guibg=darkslategray ctermbg=lightgray " 下拉菜单的颜色
-hi PmenuSel ctermfg=white ctermbg=gray guibg=Grey
+hi PmenuSel ctermfg=white ctermbg=darkgray guibg=Grey
 
 
 " 自定义标签栏显示样式
