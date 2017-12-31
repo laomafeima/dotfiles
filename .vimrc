@@ -213,7 +213,6 @@ function! Multiple_cursors_before()
         exe 'NeoCompleteLock'
     endif
 endfunction
-
 " Called once only when the multiple selection is canceled (default <Esc>)
 function! Multiple_cursors_after()
     if exists(':NeoCompleteUnlock')==2
@@ -277,8 +276,6 @@ inoremap <expr><C-l>     neocomplete#complete_common_string()
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
 function! s:my_cr_function()
     return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-    " For no inserting <CR> key.
-    "return pumvisible() ? "\<C-y>" : "\<CR>"
 endfunction
 " <TAB>: completion.
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
