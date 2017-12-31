@@ -209,16 +209,16 @@ let g:indent_guides_guide_size=1 " 设置对期限宽度
 " vim-multiple-cursors 配置
 " Called once right before you start selecting multiple cursors
 function! Multiple_cursors_before()
-  if exists(':NeoCompleteLock')==2
-    exe 'NeoCompleteLock'
-  endif
+    if exists(':NeoCompleteLock')==2
+        exe 'NeoCompleteLock'
+    endif
 endfunction
 
 " Called once only when the multiple selection is canceled (default <Esc>)
 function! Multiple_cursors_after()
-  if exists(':NeoCompleteUnlock')==2
-    exe 'NeoCompleteUnlock'
-  endif
+    if exists(':NeoCompleteUnlock')==2
+        exe 'NeoCompleteUnlock'
+    endif
 endfunction
 set selection=inclusive
 
@@ -228,9 +228,9 @@ let g:rainbow_conf = {'guifgs': ['red', 'orange', 'yellow', 'green', 'cyan', 'bl
 
 " 代码检查
 if has("mac")
-let g:ale_statusline_format = ['✘%d', '!%d', '✔']
+    let g:ale_statusline_format = ['✘%d', '!%d', '✔']
 else
-let g:ale_statusline_format = ['E:%d', 'W:%d', 'OK']
+    let g:ale_statusline_format = ['E:%d', 'W:%d', 'OK']
 endif
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 1
