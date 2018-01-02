@@ -33,6 +33,7 @@ filetype plugin indent on    " 必须
 syntax on " 开启语法高亮
 filetype on " 自动检测文件类型
 filetype plugin on " 插件支持文件类型
+colorscheme default " 使用默认配色
 set t_Co=256 " 开启256色
 set fileencodings=utf-8,gbk,cp936,ucs-bom,utf8"文件编码
 set fileformat=unix " 设置文件的兼容格式为unix，避免换行符问题
@@ -57,6 +58,7 @@ hi VertSplit  cterm=NONE term=NONE gui=NONE " 设置分屏线样式
 au FileType MARKDOWN syn clear markdownError
 au FileType MARKDOWN syn match markdownErrorNotDisplay "\w\@<=_\w\@="
 
+
 if has('gui_running')
     set guioptions-=T " 隐藏菜单栏
     set guioptions-=m " 隐藏菜单栏
@@ -64,8 +66,6 @@ if has('gui_running')
     set guioptions-=r " 隐藏右侧滚动条
     " 使用命令行下标签页样式
     set guioptions-=e
-    "set guifont=Consolas,Menlo " 设置字体
-    " hi CursorLine cterm=NONE ctermbg=DarkGray ctermfg=NONE guibg=NONE guifg=NONE " 设置高亮显示的颜色
     set lines=30 columns=110 " 设置启动时窗口大小
 endif
 
@@ -152,12 +152,6 @@ noremap <silent><leader>0 :tabn 10<cr>
 noremap <silent><s-tab> :tabnext<CR>
 inoremap <silent><s-tab> <ESC>:tabnext<CR>
 
-" 分屏窗口移动
-" map <C-j> <C-W>j
-" map <C-k> <C-W>k
-" map <C-h> <C-W>h
-" map <C-l> <C-W>l
-
 " 关闭方向键, 强迫自己用 hjkl
 map <Left> :echoe "Use 'h'"<CR>
 map <Right> :echoe "Use 'l'"<CR>
@@ -193,7 +187,6 @@ map <Leader>f <Plug>(easymotion-f)
 map <Leader>w <Plug>(easymotion-w)
 map <Leader>b <Plug>(easymotion-b)
 nmap s <Plug>(easymotion-s2)
-" hjkl
 map <Leader>l <Plug>(easymotion-lineforward)
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
@@ -207,13 +200,11 @@ nmap <silent> <F3> <Leader>ig; " F3 开启关闭对齐线
 let g:indent_guides_guide_size=1 " 设置对期限宽度
 
 " vim-multiple-cursors 配置
-" Called once right before you start selecting multiple cursors
 function! Multiple_cursors_before()
     if exists(':NeoCompleteLock')==2
         exe 'NeoCompleteLock'
     endif
 endfunction
-" Called once only when the multiple selection is canceled (default <Esc>)
 function! Multiple_cursors_after()
     if exists(':NeoCompleteUnlock')==2
         exe 'NeoCompleteUnlock'
