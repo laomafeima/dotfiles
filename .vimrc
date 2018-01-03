@@ -170,6 +170,19 @@ let g:NERDTreeMapJumpNextSibling = '' " 禁止 ctrl j 快捷键
 let g:NERDTreeMapJumpPrevSibling = '' " 禁止 ctrl k 快捷键
 let NERDTreeIgnore = ['.pyc$', '.pyo$', '.class$', '^__pycache__$'] " 隐藏部分后缀文件
 
+"Ag.vim 配置
+let g:ag_qhandler = "call SetAGMappings('q')"
+let g:ag_lhandler = "call SetAGMappings('l')"
+function! SetAGMappings(w)
+    if a:w == "l"
+        botright lopen
+    else
+        botright copen
+    endif
+    nnoremap <silent> <buffer> <c-v>  <C-w><CR><C-w>H<C-W>b<C-W>J<C-W>t
+    nnoremap <silent> <buffer> <c-t>  <C-w><CR><C-w>T
+    nnoremap <silent> <buffer> <c-x>  <C-W><CR><C-w>K
+endfunction
 
 " 添加注释的时候增加一个空格
 let g:NERDSpaceDelims = 1
