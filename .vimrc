@@ -1,41 +1,39 @@
-set nocompatible              " 去除VI一致性,必须
-filetype off                  " 必须
-" 设置包括vundle和初始化相关的 runtime path
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-" 让 vundle 管理插件版本,必须
-Plugin 'VundleVim/Vundle.vim'
-" 你的所有插件需要在下面这行之前
-Plugin 'scrooloose/nerdtree'
-Plugin 'scrooloose/nerdcommenter'
-" Plugin 'tpope/vim-fireplace'
-" Plugin 'Xuyuanp/nerdtree-git-plugin'
-Plugin 'ctrlpvim/ctrlp.vim'
-" Plugin 'altercation/vim-colors-solarized'
-Plugin 'Shougo/neocomplete.vim'
-Plugin 'nathanaelkane/vim-indent-guides'
-Plugin 'jistr/vim-nerdtree-tabs'
-Plugin 'terryma/vim-multiple-cursors'
-Plugin 'luochen1990/rainbow'
-Plugin 'skywind3000/asyncrun.vim'
-Plugin 'w0rp/ale'
-Plugin 'easymotion/vim-easymotion'
-Plugin 'haya14busa/incsearch.vim'
-Plugin 'rking/ag.vim'
-Plugin 'jiangmiao/auto-pairs'
-Plugin 'christoomey/vim-tmux-navigator'
-Plugin 'laomafeima/f5'
-
-call vundle#end()            " 必须
-filetype plugin indent on    " 必须
+set nocompatible " 去除VI一致性,必须
+call plug#begin('~/.vim/plugged')
+" 插件列表
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'jistr/vim-nerdtree-tabs', { 'on':  'NERDTreeToggle' }
+Plug 'scrooloose/nerdcommenter'
+Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
+Plug 'Yggdroot/indentLine', { 'on':  'IndentLinesToggle'}
+Plug 'Shougo/denite.nvim'
+Plug 'roxma/nvim-yarp'
+Plug 'roxma/vim-hug-neovim-rpc'
+Plug 'Shougo/echodoc.vim'
+Plug 'Shougo/deoplete.nvim', { 'do': 'pip3 install python-language-server' }
+Plug 'roxma/LanguageServer-php-neovim', {
+            \'do': 'composer install && composer run-script parse-stubs'
+            \}
+Plug 'autozimu/LanguageClient-neovim', {
+            \ 'branch': 'next',
+            \ 'do': 'bash install.sh',
+            \ }
+Plug 'terryma/vim-multiple-cursors'
+Plug 'luochen1990/rainbow'
+Plug 'skywind3000/asyncrun.vim', { 'on': 'AsyncRun' }
+Plug 'w0rp/ale'
+Plug 'easymotion/vim-easymotion'
+Plug 'jiangmiao/auto-pairs'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'laomafeima/f5'
+call plug#end()
 
 syntax on " 开启语法高亮
 filetype on " 自动检测文件类型
 filetype plugin on " 插件支持文件类型
 colorscheme default " 使用默认配色
 set t_Co=256 " 开启256色
-set fileencodings=utf-8,gbk,cp936,ucs-bom,utf8"文件编码
+set fileencodings=utf-8,gbk,cp936,ucs-bom,utf8 " 文件编码
 set fileformat=unix " 设置文件的兼容格式为unix，避免换行符问题
 set tabstop=4 " tab 的宽度
 set expandtab " 用空格代替 tab
@@ -51,51 +49,43 @@ set scrolloff=2 " 光标到最后两行后自动滚动
 set laststatus=2 " 默认显示状态栏
 set ruler " 在编辑过程中，在右下角显示光标位置的状态行
 set cc=80  " 设置 80 列显示线 
-au FileType qf setlocal nonumber colorcolumn=0 " 设置QuickFix 里面不显示80列线和行号
-set statusline=%<%n\ %f\ %m%r%h%w%{(&fenc!=''?&fenc:&enc).':'.&ff}\ %LL\ %Y%=%{ALEGetStatusLine()}\ %l,%v\ %p%%\ " 设置状态栏显示项目
+autocmd FileType qf setlocal nonumber colorcolumn=0 " 设置QuickFix 里面不显示80列线和行号
+autocmd BufReadPost * call setpos(".", getpos("'\"")) " 下次打开时将光标移动到上次位置
+set statusline=%<%n\ %f\ %m%r%h%w%{(&fenc!=''?&fenc:&enc).':'.&ff}\ %LL\ %Y%=%{GetMyStatusLine()}\ %l,%v\ %p%%\ " 设置状态栏显示项目
 hi VertSplit  cterm=NONE term=NONE gui=NONE " 设置分屏线样式
 " 修改 Markdown 文件中 单个 '_' 高亮的问题
-au FileType MARKDOWN syn clear markdownError
-au FileType MARKDOWN syn match markdownErrorNotDisplay "\w\@<=_\w\@="
-
-
-if has('gui_running')
-    set guioptions-=T " 隐藏菜单栏
-    set guioptions-=m " 隐藏菜单栏
-    set guioptions-=L " 隐藏左侧滚动条
-    set guioptions-=r " 隐藏右侧滚动条
-    " 使用命令行下标签页样式
-    set guioptions-=e
-    set lines=30 columns=110 " 设置启动时窗口大小
-endif
+autocmd FileType MARKDOWN syn clear markdownError
+autocmd FileType MARKDOWN syn match markdownErrorNotDisplay "\w\@<=_\w\@="
 
 " 设置 Y 为复制到系统粘贴板
 vnoremap Y "*y
 nnoremap Y "*yy
 nnoremap P "*p
 
-" incsearch 配置
-map /  <Plug>(incsearch-forward)
-map ?  <Plug>(incsearch-backward)
-map g/ <Plug>(incsearch-stay)
-let g:incsearch#auto_nohlsearch = 1
-map n  <Plug>(incsearch-nohl-n)
-map N  <Plug>(incsearch-nohl-N)
-map *  <Plug>(incsearch-nohl-*)
-map #  <Plug>(incsearch-nohl-#)
-map g* <Plug>(incsearch-nohl-g*)
-map g# <Plug>(incsearch-nohl-g#)
+noremap <silent> <C-P> <C-W>p; " 两个窗口之间来回跳转
 
-" 进入插入模式时改变状态栏颜色（仅限于Vim 7）
-au InsertEnter * hi StatusLine guibg=red guifg=black gui=none ctermbg=red ctermfg=black cterm=none
-au InsertLeave * hi StatusLine guibg=green guifg=black gui=none ctermbg=green ctermfg=black cterm=none
+if has('gui_running')
+    set guioptions-=T " 隐藏菜单栏
+    set guioptions-=m " 隐藏菜单栏
+    set guioptions-=L " 隐藏左侧滚动条
+    set guioptions-=r " 隐藏右侧滚动条
+    set guioptions-=e " 使用命令行下标签页样式
+    set lines=30 columns=110 " 设置启动时窗口大小
+endif
+
+
+" 进入插入模式时改变状态栏颜色
+autocmd InsertEnter * hi StatusLine guibg=red guifg=black gui=none ctermbg=red ctermfg=black cterm=none
+autocmd InsertLeave * hi StatusLine guibg=green guifg=black gui=none ctermbg=green ctermfg=black cterm=none
 hi StatusLine guibg=green guifg=black gui=none ctermbg=green ctermfg=black cterm=none " 默认状态栏颜色
 
 " 设置菜单颜色
-hi ColorColumn ctermbg=lightgray guibg=darkgray " 设置80 列 线的颜色
+hi CursorLine ctermbg=gray cterm=none" 高亮当前行
+autocmd BufWinEnter,WinEnter,BufEnter *  setlocal cursorline " 自动启动高亮当前行
+autocmd BufWinLeave,WinLeave,BufLeave *  setlocal nocursorline " 自动取消高亮当前行
+hi ColorColumn ctermbg=darkgray guibg=darkgray " 设置80 列 线的颜色
 hi Pmenu guibg=darkslategray ctermbg=lightgray " 下拉菜单的颜色
-hi PmenuSel ctermfg=white ctermbg=darkgray guibg=Grey
-
+hi PmenuSel ctermfg=white ctermbg=darkgray guibg=Grey cterm=bold
 
 " 自定义标签栏显示样式
 " 标签控制
@@ -110,7 +100,6 @@ function! MyTabLabel(n)
     endfor
     return result
 endfunction
-
 " 标签栏控制
 function! MyTabLine()
     let s = ''
@@ -132,9 +121,9 @@ endfunction
 set tabline=%!MyTabLine()
 
 " 设置 tab bar 颜色
-:hi TabLineFill ctermfg=black ctermbg=black
-:hi TabLine ctermfg=gray ctermbg=black cterm=none
-:hi TabLineSel ctermfg=darkgreen ctermbg=black
+hi TabLineFill ctermfg=black ctermbg=black
+hi TabLine ctermfg=gray ctermbg=black cterm=none
+hi TabLineSel ctermfg=darkgreen ctermbg=black
 
 "  标签页快捷键设置
 noremap <silent><tab>t :tabnew<cr>
@@ -158,6 +147,18 @@ map <Right> :echoe "Use 'l'"<CR>
 map <Up> :echoe "Use 'j'"<CR>
 map <Down> :echoe "Use 'k'"<CR>
 
+set incsearch " 搜索结果实时显示
+" 禁用高亮
+autocmd CursorHold * :set nohlsearch
+autocmd InsertEnter * :set nohlsearch
+" 当输入查找命令时，再启用高亮
+noremap n :set hlsearch<cr>n
+noremap N :set hlsearch<cr>N
+noremap / :set hlsearch<cr>/
+noremap :/ :set hlsearch<cr>:/
+noremap ? :set hlsearch<cr>?
+noremap * *:set hlsearch<cr>
+noremap # #:set hlsearch<cr>
 
 " NerdTree 配置
 nmap <silent> <F2> :NERDTreeToggle<CR>; " F2 开启和关闭 NERDTree
@@ -170,58 +171,69 @@ let g:NERDTreeMapJumpNextSibling = '' " 禁止 ctrl j 快捷键
 let g:NERDTreeMapJumpPrevSibling = '' " 禁止 ctrl k 快捷键
 let NERDTreeIgnore = ['.pyc$', '.pyo$', '.class$', '^__pycache__$'] " 隐藏部分后缀文件
 
-"Ag.vim 配置
-let g:ag_qhandler = "call SetAGMappings('q')"
-let g:ag_lhandler = "call SetAGMappings('l')"
-function! SetAGMappings(w)
-    if a:w == "l"
-        botright lopen
-    else
-        botright copen
-    endif
-    nnoremap <silent> <buffer> <c-v>  <C-w><CR><C-w>H<C-W>b<C-W>J<C-W>t
-    nnoremap <silent> <buffer> <c-t>  <C-w><CR><C-w>T
-    nnoremap <silent> <buffer> <c-x>  <C-W><CR><C-w>K
-endfunction
+" Denite 配置
+noremap <silent> <C-B> :Denite file_rec<cr>; " 浏览当前路径下文件
+noremap <silent> <C-F> :Denite grep<cr>; " 搜索当前路径下所有文件
+call denite#custom#map(
+      \ 'insert', '<C-T>', '<denite:do_action:tabopen>', 'noremap')
+call denite#custom#map(
+      \ 'insert', '<C-x>', '<denite:do_action:split>', 'noremap')
+call denite#custom#map(
+      \ 'insert', '<C-v>', '<denite:do_action:vsplit>', 'noremap')
+call denite#custom#map(
+      \ 'normal', 't', '<denite:do_action:tabopen>', 'noremap')
+call denite#custom#map(
+      \ 'normal', 'x', '<denite:do_action:split>', 'noremap')
+call denite#custom#map(
+      \ 'normal', 'v', '<denite:do_action:vsplit>', 'noremap')
+call denite#custom#map(
+      \ 'insert', '<C-j>', '<denite:move_to_next_line>', 'noremap')
+call denite#custom#map(
+      \ 'insert', '<C-k>', '<denite:move_to_previous_line>', 'noremap')
+" Ag command on grep source
+call denite#custom#var('grep', 'command', ['ag'])
+call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep'])
+call denite#custom#var('grep', 'recursive_opts', [])
+call denite#custom#var('grep', 'pattern_opt', [])
+call denite#custom#var('grep', 'separator', ['--'])
+call denite#custom#var('grep', 'final_opts', [])
+" Change ignore_globs
+call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
+      \ [ '.git/', '.ropeproject/', '__pycache__/', '*.swp',
+      \   'venv/', 'images/', '*.min.*', 'img/', 'fonts/'])
+
+" Change default prompt
+call denite#custom#option('default', 'prompt', '>')
 
 " 添加注释的时候增加一个空格
 let g:NERDSpaceDelims = 1
 
-" 快速跳转配置
+" easymotion 配置 
 " Use uppercase target labels and type as a lower case
 let g:EasyMotion_use_upper = 1
 " type `l` and match `l`&`L`
 let g:EasyMotion_smartcase = 1
 " Smartsign (type `3` and match `3`&`#`)
 let g:EasyMotion_use_smartsign_jp = 1
-
-" easymotion 配置 
-map <Leader>f <Plug>(easymotion-f)
 map <Leader>w <Plug>(easymotion-w)
 map <Leader>b <Plug>(easymotion-b)
 nmap s <Plug>(easymotion-s2)
-map <Leader>l <Plug>(easymotion-lineforward)
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
-map <Leader>h <Plug>(easymotion-linebackward)
-" repeat motions
 map <leader><leader>. <Plug>(easymotion-repeat)
 
-" vim-indent-guides 配置
-nmap <silent> <F3> <Leader>ig; " F3 开启关闭对齐线
-"let g:indent_guides_enable_on_vim_startup = 1 " 默认是否显示对齐线
-let g:indent_guides_guide_size=1 " 设置对期限宽度
+" indentLine
+let g:indentLine_enabled = 0
+let g:indentLine_char = '|'
+nmap <silent> <F3> :IndentLinesToggle<cr>" F3 开启关闭对齐线
+
 
 " vim-multiple-cursors 配置
-function! Multiple_cursors_before()
-    if exists(':NeoCompleteLock')==2
-        exe 'NeoCompleteLock'
-    endif
+function! g:Multiple_cursors_before()
+    let g:deoplete#disable_auto_complete = 1
 endfunction
-function! Multiple_cursors_after()
-    if exists(':NeoCompleteUnlock')==2
-        exe 'NeoCompleteUnlock'
-    endif
+function! g:Multiple_cursors_after()
+    let g:deoplete#disable_auto_complete = 0
 endfunction
 set selection=inclusive
 
@@ -229,7 +241,7 @@ set selection=inclusive
 let g:rainbow_active = 1
 let g:rainbow_conf = {'guifgs': ['red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'purple'], 'ctermfgs': ['red', 'darkyellow', 'yellow', 'green', 'cyan', 'blue', 'darkmagenta'],}
 
-" 代码检查
+" ALE 配置
 if has("mac")
     let g:ale_statusline_format = ['✘%d', '!%d', '✔']
 else
@@ -237,68 +249,130 @@ else
 endif
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 1
-let g:ale_linters = {'python': ['flake8']}
 let g:ale_sign_error = '>>'
 let g:ale_sign_warning = '>>'
 highlight SignColumn ctermbg=none
 highlight link ALEErrorSign Constant
 highlight link ALEWarningSign LineNr
-nmap <silent> <Leader>ep <Plug>(ale_previous_wrap) " 跳转到上一个错误
-nmap <silent> <Leader>en <Plug>(ale_next_wrap) " 跳转到下一个错误
 
-" 自动补全配置
+" echodoc 配置
+set noshowmode
+let g:echodoc_enable_at_startup = 1
+
+" LSP 配置
+let g:deoplete#enable_at_startup = 0 " 关闭自动开启
+let g:LanguageClient_diagnosticsList = "Location" "数据存储在 location list
+autocmd InsertEnter * call deoplete#enable() " 启动后开启自动补全，加快启动速度
 set completeopt-=preview " 自动补全的时候不显示预览窗口
-"Note: This option must be set in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
-" Disable AutoComplPop.
-let g:acp_enableAtStartup = 0
-" Use neocomplete.
-let g:neocomplete#enable_at_startup = 1
-" Use smartcase.
-let g:neocomplete#enable_smart_case = 1
-" Set minimum syntax keyword length.
-let g:neocomplete#sources#syntax#min_keyword_length = 3
+" 支持 tab 选择
+inoremap <silent><expr> <TAB>
+		\ pumvisible() ? "\<C-n>" :
+		\ <SID>check_back_space() ? "\<TAB>" :
+		\ deoplete#mappings#manual_complete()
+		function! s:check_back_space() abort "{{{
+		let col = col('.') - 1
+		return !col || getline('.')[col - 1]  =~ '\s'
+		endfunction"}}}
+set hidden
 
-" Define dictionary.
-let g:neocomplete#sources#dictionary#dictionaries = {
-            \ 'default' : '',
-            \ 'vimshell' : $HOME.'/.vimshell_hist',
-            \ 'scheme' : $HOME.'/.gosh_completions'
-            \ }
+let g:LanguageClient_serverCommands = {
+            \'python': ['pyls'],
+            \'php': ['php7', '~/.vim/plugged/LanguageServer-php-neovim/vendor/bin/php-language-server.php'],
+            \}
+" 在使用 LSP 的时候禁用 ALE
+for LSPTypeItem in keys(g:LanguageClient_serverCommands)
+    execute "autocmd FileType ".LSPTypeItem." :ALEDisableBuffer"
+endfor
 
-" Define keyword.
-if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
-endif
-let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+let g:LanguageClient_autoStart = 1
 
-" Plugin key-mappings.
-inoremap <expr><C-g>     neocomplete#undo_completion()
-inoremap <expr><C-l>     neocomplete#complete_common_string()
+let g:LanguageClient_diagnosticsDisplay = {
+            \1: { "name": "Error","texthl": "ALEError", "signText": g:ale_sign_error, "signTexthl": "ALEErrorSign",},
+            \2: { "name": "Warning","texthl": "ALEWarning", "signText": g:ale_sign_warning, "signTexthl": "ALEWarningSign",},
+            \3: {"name": "Information","texthl": "ALEInfo","signText": g:ale_sign_warning,"signTexthl": "ALEInfoSign",},
+            \4: {"name": "Hint","texthl": "ALEInfo","signText": g:ale_sign_warning,"signTexthl": "ALEInfoSign",},
+            \}
 
-" Recommended key-mappings.
-" <CR>: close popup and save indent.
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-    return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+let g:LanguageClientLintResult = {} " 每个文件的检查结果
+function! LanguageClientLintStatusLine() abort
+    let l:curBufNr = bufnr("%")
+    call LanguageClientLintStatusLineUpdateLintResult(l:curBufNr)
+    return LanguageClientLintStatusLineStr(l:curBufNr)
 endfunction
-" <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-" <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 
-" Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+function! LanguageClientLintStatusLineUpdateLintResult(curBufNr) abort
+    let l:msg = getloclist(".")
+    let l:lintResult = {}
+    for l:item in l:msg
+        let l:bufnr = get(l:item, "bufnr")
+        let l:type = get(l:item, "type")
+        if l:bufnr < 1 || (l:type != "E" && l:type != "W")
+            continue
+        endif
+        if has_key(l:lintResult, l:bufnr) == 0
+            let l:lintResult[l:bufnr] = {"E":0, "W":0}
+        endif
+        let l:lintResult[l:bufnr][l:type]+=1
+    endfor
+    for l:bufnrKey in keys(l:lintResult)
+        let g:LanguageClientLintResult[l:bufnrKey] = l:lintResult[l:bufnrKey]
+    endfor
+    if has_key(l:lintResult, a:curBufNr) == 0 && has_key(g:LanguageClientLintResult, a:curBufNr)
+        unlet g:LanguageClientLintResult[a:curBufNr]
+    endif
+endfunction
 
-" Enable heavy omni completion.
-if !exists('g:neocomplete#sources#omni#input_patterns')
-    let g:neocomplete#sources#omni#input_patterns = {}
-endif
+function! LanguageClientLintStatusLineStr(curBufNr) abort
+    if has_key(g:LanguageClientLintResult, a:curBufNr) == 0 || (g:LanguageClientLintResult[a:curBufNr]["E"] == 0 && g:LanguageClientLintResult[a:curBufNr]["W"] == 0)
+        return g:ale_statusline_format[2]
+    else
+        let l:str = ""
+        if g:LanguageClientLintResult[a:curBufNr]["E"] > 0
+            let l:str .= printf(g:ale_statusline_format[0], g:LanguageClientLintResult[a:curBufNr]["E"])
+        endif
+        if g:LanguageClientLintResult[a:curBufNr]["W"] > 0
+            let l:str .= printf(g:ale_statusline_format[1], g:LanguageClientLintResult[a:curBufNr]["W"])
+        endif
+        return l:str
+    endif
+endfunction
 
-" For perlomni.vim setting.
-" https://github.com/c9s/perlomni.vim
-let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+" 兼容 ALE 和 LSP
+function! GetMyStatusLine() abort
+    " 状态栏显示语法信息，同时支持 LSP 和 ALE
+    if index(keys(g:LanguageClient_serverCommands), &filetype) > -1
+        return LanguageClientLintStatusLine()
+    else
+        return ALEGetStatusLine()
+endfunction
+
+function! MyErrorNext() abort
+    if index(keys(g:LanguageClient_serverCommands), &filetype) > -1
+        try
+            execute "lne"
+        catch /No more items/
+            execute "lr"
+        endtry
+    else
+        execute "normal \<Plug>(ale_next_wrap)"
+    endif
+endfunction
+function! MyErrorPrev() abort
+    if index(keys(g:LanguageClient_serverCommands), &filetype) > -1
+        try
+            execute "lp"
+        catch /No more items/
+            execute "lla"
+        endtry
+    else
+        execute "normal \<Plug>(ale_previous_wrap)"
+    endif
+endfunction
+
+nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+nnoremap <silent> <C-]> :call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> <F4> :call LanguageClient_textDocument_rename()<CR>
+" 查看当前方法属性的所有引用
+nnoremap <silent> <F6> :call LanguageClient_textDocument_references() <bar> :lli<cr>
+nnoremap <silent> <Leader>ep :call MyErrorPrev()<cr>; " 跳转到上一个错误/引用
+nnoremap <silent> <Leader>en :call MyErrorNext()<cr>; " 跳转到下一个错误/引用
