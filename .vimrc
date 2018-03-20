@@ -10,13 +10,13 @@ Plug 'Shougo/denite.nvim'
 Plug 'roxma/nvim-yarp'
 Plug 'roxma/vim-hug-neovim-rpc'
 Plug 'Shougo/echodoc.vim'
-Plug 'Shougo/deoplete.nvim', { 'do': 'pip3 install python-language-server' }
+Plug 'Shougo/deoplete.nvim', { 'do': 'pip3 install neovim' }
 Plug 'roxma/LanguageServer-php-neovim', {
             \'do': 'composer install && composer run-script parse-stubs'
             \}
 Plug 'autozimu/LanguageClient-neovim', {
             \ 'branch': 'next',
-            \ 'do': 'bash install.sh',
+            \ 'do': 'bash install.sh && pip3 install python-language-server && rustup component add rls-preview rust-analysis rust-src',
             \ }
 Plug 'terryma/vim-multiple-cursors'
 Plug 'luochen1990/rainbow'
