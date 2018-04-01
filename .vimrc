@@ -4,19 +4,18 @@ call plug#begin('~/.vim/plugged')
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'jistr/vim-nerdtree-tabs', { 'on':  'NERDTreeToggle' }
 Plug 'scrooloose/nerdcommenter'
-Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 Plug 'Yggdroot/indentLine', { 'on':  'IndentLinesToggle'}
 Plug 'Shougo/denite.nvim'
 Plug 'roxma/nvim-yarp'
 Plug 'roxma/vim-hug-neovim-rpc'
 Plug 'Shougo/echodoc.vim'
-Plug 'Shougo/deoplete.nvim', { 'do': 'pip3 install python-language-server' }
+Plug 'Shougo/deoplete.nvim'
 Plug 'roxma/LanguageServer-php-neovim', {
             \'do': 'composer install && composer run-script parse-stubs'
             \}
 Plug 'autozimu/LanguageClient-neovim', {
             \ 'branch': 'next',
-            \ 'do': 'bash install.sh',
+            \ 'do': 'bash install.sh && pip3 install python-language-server && rustup component add rls-preview rust-analysis rust-src && cargo install racer',
             \ }
 Plug 'terryma/vim-multiple-cursors'
 Plug 'luochen1990/rainbow'
@@ -30,7 +29,8 @@ call plug#end()
 
 syntax on " 开启语法高亮
 filetype on " 自动检测文件类型
-filetype plugin on " 插件支持文件类型
+filetype plugin indent on " 插件文件类型和缩进
+set mouse= " 禁止鼠标
 colorscheme default " 使用默认配色
 set t_Co=256 " 开启256色
 set fileencodings=utf-8,gbk,cp936,ucs-bom,utf8 " 文件编码
@@ -56,6 +56,7 @@ hi VertSplit  cterm=NONE term=NONE gui=NONE " 设置分屏线样式
 " 修改 Markdown 文件中 单个 '_' 高亮的问题
 autocmd FileType MARKDOWN syn clear markdownError
 autocmd FileType MARKDOWN syn match markdownErrorNotDisplay "\w\@<=_\w\@="
+au BufRead,BufNewFile *.php set indentexpr= | set smartindent " 针对 PHP 禁用基于 PHP 语法的缩进
 
 " 设置 Y 为复制到系统粘贴板
 vnoremap Y "*y
@@ -80,7 +81,7 @@ autocmd InsertLeave * hi StatusLine guibg=green guifg=black gui=none ctermbg=gre
 hi StatusLine guibg=green guifg=black gui=none ctermbg=green ctermfg=black cterm=none " 默认状态栏颜色
 
 " 设置菜单颜色
-hi CursorLine ctermbg=gray cterm=none" 高亮当前行
+hi CursorLine ctermbg=darkgray cterm=none " 高亮当前行
 autocmd BufWinEnter,WinEnter,BufEnter *  setlocal cursorline " 自动启动高亮当前行
 autocmd BufWinLeave,WinLeave,BufLeave *  setlocal nocursorline " 自动取消高亮当前行
 hi ColorColumn ctermbg=darkgray guibg=darkgray " 设置80 列 线的颜色
@@ -88,11 +89,27 @@ hi Pmenu guibg=darkslategray ctermbg=lightgray " 下拉菜单的颜色
 hi PmenuSel ctermfg=white ctermbg=darkgray guibg=Grey cterm=bold
 
 " 自定义标签栏显示样式
+function! GetShortName(name)
+    let words = split(a:name, "/")
+    if len(words) <= 4
+        return a:name
+    endif
+    let filename = remove(words, -1)
+    let last_path = remove(words, -1)
+    let s_words = map(words, {key, val -> strpart(val, 0, 2)})
+    call add(s_words, last_path)
+    call add(s_words, filename)
+    return join(s_words, "/")
+endfunction
 " 标签控制
 function! MyTabLabel(n)
     let buflist = tabpagebuflist(a:n)
     let winnr = tabpagewinnr(a:n)
-    let result = a:n . ":" . (bufname(buflist[winnr - 1]) == "" ? "[No Name]" : bufname(buflist[winnr - 1]))
+    if a:n == tabpagenr() " 当前 tab 显示完整路径
+        let result = a:n . ":" . (bufname(buflist[winnr - 1]) == "" ? "[No Name]" : bufname(buflist[winnr - 1]))
+    else
+        let result = a:n . ":" . (bufname(buflist[winnr - 1]) == "" ? "[No Name]" : GetShortName(bufname(buflist[winnr - 1])))
+    endif
     for bufnr in buflist
         if getbufvar(bufnr, "&modified")
             let result .= (bufnr == buflist[winnr - 1] ? "+" : "~")
@@ -126,6 +143,7 @@ hi TabLine ctermfg=gray ctermbg=black cterm=none
 hi TabLineSel ctermfg=darkgreen ctermbg=black
 
 "  标签页快捷键设置
+noremap <silent><C-T> :tabnew<cr>
 noremap <silent><tab>t :tabnew<cr>
 noremap <silent><tab>w :tabclose<cr>
 noremap <silent><leader>1 :tabn 1<cr>
@@ -161,7 +179,16 @@ noremap * *:set hlsearch<cr>
 noremap # #:set hlsearch<cr>
 
 " NerdTree 配置
-nmap <silent> <F2> :NERDTreeToggle<CR>; " F2 开启和关闭 NERDTree
+function! g:MyNERDTreeToggle()
+    if exists(":NERDTreeMirrorToggle") 
+        execute ":NERDTreeMirrorToggle"
+    else
+        execute ":NERDTreeToggle"
+    endif
+endfunction
+
+command! -nargs=0 MyNERDTreeToggle call g:MyNERDTreeToggle()
+nmap <silent> <F2> :MyNERDTreeToggle<CR>; " F2 开启和关闭 NERDTree
 let NERDTreeShowBookmarks=1 " 默认显示书签
 let NERDTreeWinSize=24 " 设置目录窗口宽度
 let g:nerdtree_tabs_focus_on_files=1 " 设置 打开文件后文件窗口获得焦点
@@ -200,7 +227,7 @@ call denite#custom#var('grep', 'final_opts', [])
 " Change ignore_globs
 call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
       \ [ '.git/', '.ropeproject/', '__pycache__/', '*.swp',
-      \   'venv/', 'images/', '*.min.*', 'img/', 'fonts/'])
+      \   'venv/', 'images/', '*.log.*', '*.min.*', 'img/', 'fonts/'])
 
 " Change default prompt
 call denite#custom#option('default', 'prompt', '>')
@@ -277,7 +304,8 @@ set hidden
 
 let g:LanguageClient_serverCommands = {
             \'python': ['pyls'],
-            \'php': ['php7', '~/.vim/plugged/LanguageServer-php-neovim/vendor/bin/php-language-server.php'],
+            \'php': ['php', '~/.vim/plugged/LanguageServer-php-neovim/vendor/bin/php-language-server.php'],
+            \'rust': ['rustup', 'run', 'nightly', 'rls'],
             \}
 " 在使用 LSP 的时候禁用 ALE
 for LSPTypeItem in keys(g:LanguageClient_serverCommands)
