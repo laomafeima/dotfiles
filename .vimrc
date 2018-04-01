@@ -15,7 +15,7 @@ Plug 'roxma/LanguageServer-php-neovim', {
             \}
 Plug 'autozimu/LanguageClient-neovim', {
             \ 'branch': 'next',
-            \ 'do': 'bash install.sh && pip3 install python-language-server && rustup component add rls-preview rust-analysis rust-src && cargo install racer',
+            \ 'do': 'bash install.sh && pip3 install python-language-server && pip3 install neovim && rustup component add rls-preview rust-analysis rust-src && cargo install racer',
             \ }
 Plug 'terryma/vim-multiple-cursors'
 Plug 'luochen1990/rainbow'
