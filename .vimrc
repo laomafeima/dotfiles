@@ -354,15 +354,31 @@ function! LanguageClientLintStatusLineStr(curBufNr) abort
     if has_key(g:LanguageClientLintResult, a:curBufNr) == 0 || (g:LanguageClientLintResult[a:curBufNr]["E"] == 0 && g:LanguageClientLintResult[a:curBufNr]["W"] == 0)
         return g:ale_statusline_format[2]
     else
+        return MakeStatusLineStr(g:LanguageClientLintResult[a:curBufNr]["E"], g:LanguageClientLintResult[a:curBufNr]["W"])
+    endif
+endfunction
+
+function! MakeStatusLineStr(errno, warno) abort
+    if a:errno == 0 && a:warno == 0
+        return g:ale_statusline_format[2]
+    else
         let l:str = ""
-        if g:LanguageClientLintResult[a:curBufNr]["E"] > 0
-            let l:str .= printf(g:ale_statusline_format[0], g:LanguageClientLintResult[a:curBufNr]["E"])
+        if a:errno > 0
+            let l:str .= printf(g:ale_statusline_format[0], a:errno)
         endif
-        if g:LanguageClientLintResult[a:curBufNr]["W"] > 0
-            let l:str .= printf(g:ale_statusline_format[1], g:LanguageClientLintResult[a:curBufNr]["W"])
+        if a:warno > 0
+            let l:str .= printf(g:ale_statusline_format[1], a:warno)
         endif
         return l:str
     endif
+endfunction
+
+
+function! ALELinterStatus() abort
+    let l:counts = ale#statusline#Count(bufnr(''))
+    let l:all_errors = l:counts.error + l:counts.style_error
+    let l:all_non_errors = l:counts.total - l:all_errors
+    return MakeStatusLineStr(all_errors, all_non_errors)
 endfunction
 
 " 兼容 ALE 和 LSP
@@ -371,7 +387,7 @@ function! GetMyStatusLine() abort
     if index(keys(g:LanguageClient_serverCommands), &filetype) > -1
         return LanguageClientLintStatusLine()
     else
-        return ALEGetStatusLine()
+        return ALELinterStatus()
 endfunction
 
 function! MyErrorNext() abort
@@ -397,7 +413,16 @@ function! MyErrorPrev() abort
     endif
 endfunction
 
-nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+function! TextDocumentHoverToggle() abort
+    try
+        execute "wincmd P"
+        execute "pclose"
+    catch /There is no preview window/
+        call LanguageClient_textDocument_hover()
+    endtry
+endfunction
+
+nnoremap <silent> H :call TextDocumentHoverToggle()<CR>
 nnoremap <silent> <C-]> :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> <F4> :call LanguageClient_textDocument_rename()<CR>
 " 查看当前方法属性的所有引用
