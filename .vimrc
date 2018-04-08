@@ -422,7 +422,7 @@ function! TextDocumentHoverToggle() abort
     endtry
 endfunction
 
-nnoremap <silent> H :call TextDocumentHoverToggle()<CR>
+nnoremap <silent> <Leader>H :call TextDocumentHoverToggle()<CR>
 nnoremap <silent> <C-]> :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> <F4> :call LanguageClient_textDocument_rename()<CR>
 " 查看当前方法属性的所有引用
