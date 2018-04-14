@@ -269,11 +269,7 @@ let g:rainbow_active = 1
 let g:rainbow_conf = {'guifgs': ['red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'purple'], 'ctermfgs': ['red', 'darkyellow', 'yellow', 'green', 'cyan', 'blue', 'darkmagenta'],}
 
 " ALE 配置
-if has("mac")
-    let g:ale_statusline_format = ['✘%d', '!%d', '✔']
-else
-    let g:ale_statusline_format = ['E:%d', 'W:%d', 'OK']
-endif
+let g:ale_statusline_format = ['✘%d', '!%d', '✔']
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 1
 let g:ale_sign_error = '>>'
