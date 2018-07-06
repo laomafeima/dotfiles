@@ -19,7 +19,7 @@ Plug 'autozimu/LanguageClient-neovim', {
             \ }
 Plug 'terryma/vim-multiple-cursors'
 Plug 'luochen1990/rainbow'
-Plug 'skywind3000/asyncrun.vim', { 'on': ['AsyncRun', 'F5run'] }
+Plug 'skywind3000/asyncrun.vim', { 'on': ['Asyncrun', 'F5run'] }
 Plug 'w0rp/ale'
 Plug 'easymotion/vim-easymotion'
 Plug 'jiangmiao/auto-pairs'
