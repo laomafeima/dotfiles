@@ -19,12 +19,12 @@ Plug 'autozimu/LanguageClient-neovim', {
             \ }
 Plug 'terryma/vim-multiple-cursors'
 Plug 'luochen1990/rainbow'
-Plug 'skywind3000/asyncrun.vim', { 'on': ['Asyncrun', 'F5run'] }
+Plug 'skywind3000/asyncrun.vim', { 'on': ['Asyncrun', 'F5Run'] }
 Plug 'w0rp/ale'
 Plug 'easymotion/vim-easymotion'
 Plug 'jiangmiao/auto-pairs'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'laomafeima/f5', { 'on': 'F5run' }
+Plug 'laomafeima/f5', { 'on': 'F5Run' }
 call plug#end()
 
 syntax on " 开启语法高亮
@@ -255,8 +255,8 @@ let g:indentLine_char = '|'
 nmap <silent> <F3> :IndentLinesToggle<cr>" F3 开启关闭对齐线
 
 " F5 
-nnoremap <silent> <F5> :F5run<CR>; " F5 运行
-autocmd FileType qf nmap <silent> <C-C> :F5stop<CR>; " QuickFix 框 Ctrl C 停止异步运行，非运行时会关闭 QuickFix
+nnoremap <silent> <F5> :F5Run<CR>; " F5 运行
+autocmd FileType qf nmap <silent> <C-C> :F5Stop<CR>; " QuickFix 框 Ctrl C 停止异步运行，非运行时会关闭 QuickFix
 
 " vim-multiple-cursors 配置
 function! g:Multiple_cursors_before()
