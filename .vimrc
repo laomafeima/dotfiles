@@ -80,6 +80,9 @@ autocmd InsertEnter * hi StatusLine guibg=red guifg=black gui=none ctermbg=red c
 autocmd InsertLeave * hi StatusLine guibg=green guifg=black gui=none ctermbg=green ctermfg=black cterm=none
 hi StatusLine guibg=green guifg=black gui=none ctermbg=green ctermfg=black cterm=none " 默认状态栏颜色
 
+" Visual 模式下的颜色
+hi Visual term=reverse ctermbg=DarkGrey guibg=LightGrey
+
 " 设置菜单颜色
 hi CursorLine ctermbg=darkgray cterm=none " 高亮当前行
 autocmd BufWinEnter,WinEnter,BufEnter *  setlocal cursorline " 自动启动高亮当前行
