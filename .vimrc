@@ -15,16 +15,16 @@ Plug 'roxma/LanguageServer-php-neovim', {
             \}
 Plug 'autozimu/LanguageClient-neovim', {
             \ 'branch': 'next',
-            \ 'do': 'bash install.sh && pip3 install neovim --upgrade && pip3 install python-language-server --upgrade && rustup component add rls-preview rust-analysis rust-src --toolchain nightly && cargo install racer',
+            \ 'do': 'bash install.sh && pip3 install neovim --upgrade && pip3 install python-language-server --upgrade && rustup component add rls-preview rust-analysis rust-src --toolchain nightly && cargo +nightly install racer',
             \ }
 Plug 'terryma/vim-multiple-cursors'
 Plug 'luochen1990/rainbow'
-Plug 'skywind3000/asyncrun.vim', { 'on': ['Asyncrun', 'F5Run'] }
+Plug 'skywind3000/asyncrun.vim', { 'on': ['Asyncrun', 'Run', 'RunSelf'] }
 Plug 'w0rp/ale'
 Plug 'easymotion/vim-easymotion'
 Plug 'jiangmiao/auto-pairs'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'laomafeima/f5', { 'on': 'F5Run' }
+Plug 'laomafeima/run.vim', { 'on': ['Run', 'RunSelf'] }
 call plug#end()
 
 syntax on " 开启语法高亮
@@ -191,7 +191,7 @@ function! g:MyNERDTreeToggle()
 endfunction
 
 command! -nargs=0 MyNERDTreeToggle call g:MyNERDTreeToggle()
-nmap <silent> <F2> :MyNERDTreeToggle<CR>; " F2 开启和关闭 NERDTree
+nmap <silent> <C-E> :MyNERDTreeToggle<CR>; " Ctrl+E 开启和关闭 NERDTree 
 let NERDTreeShowBookmarks=1 " 默认显示书签
 let NERDTreeWinSize=24 " 设置目录窗口宽度
 let g:nerdtree_tabs_focus_on_files=1 " 设置 打开文件后文件窗口获得焦点
@@ -220,17 +220,23 @@ call denite#custom#map(
       \ 'insert', '<C-j>', '<denite:move_to_next_line>', 'noremap')
 call denite#custom#map(
       \ 'insert', '<C-k>', '<denite:move_to_previous_line>', 'noremap')
-" Ag command on grep source
-call denite#custom#var('grep', 'command', ['ag'])
-call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep'])
+
+" Ripgrep command on grep source
+call denite#custom#var('grep', 'command', ['rg'])
+call denite#custom#var('grep', 'default_opts',
+            \ ['--vimgrep', '--no-heading'])
 call denite#custom#var('grep', 'recursive_opts', [])
-call denite#custom#var('grep', 'pattern_opt', [])
+call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
 call denite#custom#var('grep', 'separator', ['--'])
 call denite#custom#var('grep', 'final_opts', [])
 " Change ignore_globs
-call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
+call denite#custom#filter('matcher/ignore_globs', 'ignore_globs',
       \ [ '.git/', '.ropeproject/', '__pycache__/', '*.swp',
       \   'venv/', 'images/', '*.log.*', '*.min.*', 'img/', 'fonts/'])
+
+" Change file_rec command
+call denite#custom#var('file_rec', 'command',
+            \ ['rg', '--files', '--glob', '!.git'])
 
 " Change default prompt
 call denite#custom#option('default', 'prompt', '>')
@@ -255,11 +261,10 @@ map <leader><leader>. <Plug>(easymotion-repeat)
 " indentLine
 let g:indentLine_enabled = 0
 let g:indentLine_char = '|'
-nmap <silent> <F3> :IndentLinesToggle<cr>" F3 开启关闭对齐线
+nmap <silent> <C-I> :IndentLinesToggle<cr>" Ctrl I开启关闭对齐线
 
-" F5 
-nnoremap <silent> <F5> :F5Run<CR>; " F5 运行
-autocmd FileType qf nmap <silent> <C-C> :F5Stop<CR>; " QuickFix 框 Ctrl C 停止异步运行，非运行时会关闭 QuickFix
+" Run.vim
+autocmd FileType qf nmap <silent> <C-C> :RunStop<CR>; " QuickFix 框 Ctrl C 停止异步运行，非运行时会关闭 QuickFix
 
 " vim-multiple-cursors 配置
 function! g:Multiple_cursors_before()
@@ -426,8 +431,7 @@ endfunction
 
 nnoremap <silent> <Leader>H :call TextDocumentHoverToggle()<CR>
 nnoremap <silent> <C-]> :call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> <F4> :call LanguageClient_textDocument_rename()<CR>
 " 查看当前方法属性的所有引用
-nnoremap <silent> <F6> :call LanguageClient_textDocument_references() <bar> :lli<cr>
+nnoremap <silent> <Leader>R :call LanguageClient_textDocument_references() <bar> :lli<cr>
 nnoremap <silent> <Leader>ep :call MyErrorPrev()<cr>; " 跳转到上一个错误/引用
 nnoremap <silent> <Leader>en :call MyErrorNext()<cr>; " 跳转到下一个错误/引用
