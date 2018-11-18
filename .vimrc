@@ -25,6 +25,7 @@ Plug 'easymotion/vim-easymotion'
 Plug 'jiangmiao/auto-pairs'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'laomafeima/run.vim', { 'on': ['Run', 'RunSelf'] }
+Plug 'laomafeima/osc52yank.vim', { 'on': ['Osc52YankLines', 'Osc52YankSelected'] }
 call plug#end()
 
 syntax on " 开启语法高亮
@@ -59,8 +60,13 @@ autocmd FileType MARKDOWN syn match markdownErrorNotDisplay "\w\@<=_\w\@="
 au BufRead,BufNewFile *.php set indentexpr= | set smartindent " 针对 PHP 禁用基于 PHP 语法的缩进
 
 " 设置 Y 为复制到系统粘贴板
-vnoremap Y "*y
-nnoremap Y "*yy
+if getregtype("*") == ""
+    vnoremap Y :Osc52YankSelected<cr>
+    nnoremap Y :Osc52YankLines<cr>
+else
+    vnoremap Y "*y
+    nnoremap Y "*yy
+endif
 nnoremap P "*p
 
 noremap <silent> <C-P> <C-W>p; " 两个窗口之间来回跳转
@@ -261,7 +267,7 @@ map <leader><leader>. <Plug>(easymotion-repeat)
 " indentLine
 let g:indentLine_enabled = 0
 let g:indentLine_char = '|'
-nmap <silent> <C-I> :IndentLinesToggle<cr>" Ctrl I开启关闭对齐线
+" nmap <silent> <C-I> :IndentLinesToggle<cr>" Ctrl I开启关闭对齐线
 
 " Run.vim
 autocmd FileType qf nmap <silent> <C-C> :RunStop<CR>; " QuickFix 框 Ctrl C 停止异步运行，非运行时会关闭 QuickFix
@@ -432,6 +438,6 @@ endfunction
 nnoremap <silent> <Leader>H :call TextDocumentHoverToggle()<CR>
 nnoremap <silent> <C-]> :call LanguageClient_textDocument_definition()<CR>
 " 查看当前方法属性的所有引用
-nnoremap <silent> <Leader>R :call LanguageClient_textDocument_references() <bar> :lli<cr>
+nnoremap <silent> <Leader>ref :call LanguageClient_textDocument_references() <bar> :lli<cr>
 nnoremap <silent> <Leader>ep :call MyErrorPrev()<cr>; " 跳转到上一个错误/引用
 nnoremap <silent> <Leader>en :call MyErrorNext()<cr>; " 跳转到下一个错误/引用
