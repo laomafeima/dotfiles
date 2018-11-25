@@ -10,9 +10,6 @@ Plug 'roxma/nvim-yarp'
 Plug 'roxma/vim-hug-neovim-rpc'
 Plug 'Shougo/echodoc.vim'
 Plug 'Shougo/deoplete.nvim'
-Plug 'roxma/LanguageServer-php-neovim', {
-            \'do': 'composer install && composer run-script parse-stubs'
-            \}
 Plug 'autozimu/LanguageClient-neovim', {
             \ 'branch': 'next',
             \ 'do': 'bash install.sh && pip3 install neovim --upgrade && pip3 install python-language-server --upgrade && rustup component add rls-preview rust-analysis rust-src --toolchain nightly && cargo +nightly install racer',
@@ -270,6 +267,10 @@ let g:indentLine_char = '|'
 " nmap <silent> <C-I> :IndentLinesToggle<cr>" Ctrl I开启关闭对齐线
 
 " Run.vim
+" 快捷输入
+command! -nargs=? R Run <f-args>
+command! -nargs=? T Run test
+nmap <leader>t :T<CR>
 autocmd FileType qf nmap <silent> <C-C> :RunStop<CR>; " QuickFix 框 Ctrl C 停止异步运行，非运行时会关闭 QuickFix
 
 " vim-multiple-cursors 配置
@@ -317,21 +318,22 @@ set hidden
 
 let g:LanguageClient_serverCommands = {
             \'python': ['pyls'],
-            \'php': ['php', '~/.vim/plugged/LanguageServer-php-neovim/vendor/bin/php-language-server.php'],
             \'rust': ['rustup', 'run', 'nightly', 'rls'],
+            \'go': ['go-langserver','-diagnostics','-func-snippet-enabled','-gocodecompletion'],
             \}
+
+let g:LanguageClient_autoStart = 0
 " 在使用 LSP 的时候禁用 ALE
 for LSPTypeItem in keys(g:LanguageClient_serverCommands)
     execute "autocmd FileType ".LSPTypeItem." :ALEDisableBuffer"
+    let g:LanguageClient_autoStart = 1
 endfor
-
-let g:LanguageClient_autoStart = 1
 
 let g:LanguageClient_diagnosticsDisplay = {
             \1: { "name": "Error","texthl": "ALEError", "signText": g:ale_sign_error, "signTexthl": "ALEErrorSign",},
             \2: { "name": "Warning","texthl": "ALEWarning", "signText": g:ale_sign_warning, "signTexthl": "ALEWarningSign",},
-            \3: {"name": "Information","texthl": "ALEInfo","signText": g:ale_sign_warning,"signTexthl": "ALEInfoSign",},
-            \4: {"name": "Hint","texthl": "ALEInfo","signText": g:ale_sign_warning,"signTexthl": "ALEInfoSign",},
+            \3: { "name": "Information","texthl": "ALEInfo","signText": g:ale_sign_warning,"signTexthl": "ALEInfoSign",},
+            \4: { "name": "Hint","texthl": "ALEInfo","signText": g:ale_sign_warning,"signTexthl": "ALEInfoSign",},
             \}
 
 let g:LanguageClientLintResult = {} " 每个文件的检查结果
