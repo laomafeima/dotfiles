@@ -62,16 +62,6 @@ autocmd FileType MARKDOWN syn clear markdownError
 autocmd FileType MARKDOWN syn match markdownErrorNotDisplay "\w\@<=_\w\@="
 au BufRead,BufNewFile *.php set indentexpr= | set smartindent " 针对 PHP 禁用基于 PHP 语法的缩进
 
-" 设置 Y 为复制到系统粘贴板
-if getregtype("*") == ""
-    vnoremap Y :Osc52YankSelected<cr>
-    nnoremap Y :Osc52YankLines<cr>
-else
-    vnoremap Y "*y
-    nnoremap Y "*yy
-endif
-nnoremap P "*p
-
 noremap <silent> <C-P> <C-W>p; " 两个窗口之间来回跳转
 
 if has('gui_running')
@@ -279,6 +269,19 @@ command! -nargs=? T Run test
 nmap <leader>t :T<CR>
 autocmd FileType qf nmap <silent> <C-C> :RunStop<CR>; " QuickFix 框 Ctrl C 停止异步运行，非运行时会关闭 QuickFix
 
+" OSC52Yank
+autocmd VimEnter * call SetYankMap()
+function! SetYankMap()
+    if getregtype("*") == ""
+        vnoremap Y :Osc52YankSelected<cr>
+        nnoremap Y :Osc52YankLines<cr>
+    else
+        vnoremap Y "*y
+        nnoremap Y "*yy
+    endif
+    nnoremap P "*p
+endfunction
+
 " vim-multiple-cursors 配置
 function! g:Multiple_cursors_before()
     let g:deoplete#disable_auto_complete = 1
@@ -415,7 +418,7 @@ function! MyErrorNext() abort
     if index(keys(g:LanguageClient_serverCommands), &filetype) > -1
         try
             execute "lne"
-        catch /No more items/
+        catch /E553:
             execute "lr"
         endtry
     else
@@ -426,7 +429,7 @@ function! MyErrorPrev() abort
     if index(keys(g:LanguageClient_serverCommands), &filetype) > -1
         try
             execute "lp"
-        catch /No more items/
+        catch /E553:
             execute "lla"
         endtry
     else
@@ -438,7 +441,7 @@ function! TextDocumentHoverToggle() abort
     try
         execute "wincmd P"
         execute "pclose"
-    catch /There is no preview window/
+    catch /E441:
         call LanguageClient_textDocument_hover()
     endtry
 endfunction
