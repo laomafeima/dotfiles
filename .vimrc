@@ -1,4 +1,10 @@
 set nocompatible " 去除VI一致性,必须
+" Automatic installation
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 call plug#begin('~/.vim/plugged')
 " 插件列表
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
