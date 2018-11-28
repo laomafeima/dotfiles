@@ -10,7 +10,8 @@ call plug#begin('~/.vim/plugged')
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'jistr/vim-nerdtree-tabs', { 'on':  'NERDTreeToggle' }
 Plug 'scrooloose/nerdcommenter'
-Plug 'Yggdroot/indentLine', { 'on':  'IndentLinesToggle'}
+Plug 'cespare/vim-toml', { 'for': 'toml' }
+Plug 'Yggdroot/indentLine', { 'on':  'IndentLinesToggle' }
 Plug 'Shougo/denite.nvim'
 Plug 'roxma/nvim-yarp'
 Plug 'roxma/vim-hug-neovim-rpc'
