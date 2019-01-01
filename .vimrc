@@ -59,11 +59,14 @@ autocmd BufReadPost * call setpos(".", getpos("'\"")) " 下次打开时将光标
 set statusline=%<%n\ %f\ %m%r%h%w%{(&fenc!=''?&fenc:&enc).':'.&ff}\ %LL\ %Y%=%{GetMyStatusLine()}\ %l,%v\ %p%%\ " 设置状态栏显示项目
 hi VertSplit  cterm=NONE term=NONE gui=NONE " 设置分屏线样式
 " 修改 Markdown 文件中 单个 '_' 高亮的问题
-autocmd FileType MARKDOWN syn clear markdownError
-autocmd FileType MARKDOWN syn match markdownErrorNotDisplay "\w\@<=_\w\@="
+autocmd FileType markdown syn clear markdownError
+autocmd FileType markdown syn match markdownErrorNotDisplay "\w\@<=_\w\@="
 au BufRead,BufNewFile *.php set indentexpr= | set smartindent " 针对 PHP 禁用基于 PHP 语法的缩进
+autocmd FileType go set formatoptions+=r " 针对 Golang 的注释优化
 
 noremap <silent> <C-P> <C-W>p; " 两个窗口之间来回跳转
+" Ctrl-C 映射为 Esc 按键方便无 Esc 按键键盘
+inoremap <C-C> <ESC>
 
 if has('gui_running')
     set guioptions-=T " 隐藏菜单栏
