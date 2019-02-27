@@ -94,11 +94,23 @@ hi ColorColumn ctermbg=darkgray guibg=darkgray " 设置80 列 线的颜色
 hi Pmenu guibg=darkslategray ctermbg=lightgray " 下拉菜单的颜色
 hi PmenuSel ctermfg=white ctermbg=darkgray guibg=Grey cterm=bold
 
+" 移除当前目录路径
+function! RemoveCurPath(name)
+    if stridx(a:name, getcwd()) == 0
+        let name = substitute(a:name, getcwd() . "/", "", "")
+    else
+        let name = a:name
+    endif
+    return name
+endfunction
+
+
 " 自定义标签栏显示样式
 function! GetShortName(name)
-    let words = split(a:name, "/")
+    let name = RemoveCurPath(a:name)
+    let words = split(name, "/")
     if len(words) <= 4
-        return a:name
+        return name
     endif
     let filename = remove(words, -1)
     let last_path = remove(words, -1)
@@ -112,7 +124,7 @@ function! MyTabLabel(n)
     let buflist = tabpagebuflist(a:n)
     let winnr = tabpagewinnr(a:n)
     if a:n == tabpagenr() " 当前 tab 显示完整路径
-        let result = a:n . ":" . (bufname(buflist[winnr - 1]) == "" ? "[No Name]" : bufname(buflist[winnr - 1]))
+        let result = a:n . ":" . (bufname(buflist[winnr - 1]) == "" ? "[No Name]" : RemoveCurPath(bufname(buflist[winnr - 1])))
     else
         let result = a:n . ":" . (bufname(buflist[winnr - 1]) == "" ? "[No Name]" : GetShortName(bufname(buflist[winnr - 1])))
     endif
@@ -329,6 +341,9 @@ inoremap <silent><expr> <TAB>
 		endfunction"}}}
 set hidden
 
+let g:LanguageClient_rootMarkers = {
+        \ 'go': ['.git', 'Makefile', 'Cargo.toml', 'go.mod'],
+        \ }
 let g:LanguageClient_serverCommands = {
             \'python': ['pyls'],
             \'rust': ['rustup', 'run', 'nightly', 'rls'],
@@ -339,7 +354,8 @@ let g:LanguageClient_autoStart = 0
 " 在使用 LSP 的时候禁用 ALE
 for LSPTypeItem in keys(g:LanguageClient_serverCommands)
     execute "autocmd FileType ".LSPTypeItem." :ALEDisableBuffer"
-    let g:LanguageClient_autoStart = 1
+    " 启动后开启 LSP ，加快启动速度
+    execute "autocmd FileType " . LSPTypeItem . " :LanguageClientStart"
 endfor
 
 let g:LanguageClient_diagnosticsDisplay = {
