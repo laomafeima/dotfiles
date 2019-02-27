@@ -56,7 +56,7 @@ set ruler " 在编辑过程中，在右下角显示光标位置的状态行
 set cc=80  " 设置 80 列显示线 
 autocmd FileType qf setlocal nonumber colorcolumn=0 " 设置QuickFix 里面不显示80列线和行号
 autocmd BufReadPost * call setpos(".", getpos("'\"")) " 下次打开时将光标移动到上次位置
-set statusline=%<%n\ %f\ %m%r%h%w%{(&fenc!=''?&fenc:&enc).':'.&ff}\ %LL\ %Y%=%{GetMyStatusLine()}\ %l,%v\ %p%%\ " 设置状态栏显示项目
+set statusline=%<%n\ %{RemoveCurPath(expand('%'))}\ %m%r%h%w%{(&fenc!=''?&fenc:&enc).':'.&ff}\ %LL\ %Y%=%{GetMyStatusLine()}\ %l,%v\ %p%%\ " 设置状态栏显示项目
 hi VertSplit  cterm=NONE term=NONE gui=NONE " 设置分屏线样式
 " 修改 Markdown 文件中 单个 '_' 高亮的问题
 autocmd FileType markdown syn clear markdownError
