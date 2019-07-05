@@ -1,9 +1,9 @@
 set nocompatible " 去除VI一致性,必须
 " Automatic installation
 if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 call plug#begin('~/.vim/plugged')
 " 插件列表
@@ -13,14 +13,6 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'cespare/vim-toml', { 'for': 'toml' }
 Plug 'Yggdroot/indentLine', { 'on':  'IndentLinesToggle' }
 Plug 'Shougo/denite.nvim'
-Plug 'roxma/nvim-yarp'
-Plug 'roxma/vim-hug-neovim-rpc'
-Plug 'Shougo/echodoc.vim'
-Plug 'Shougo/deoplete.nvim'
-Plug 'autozimu/LanguageClient-neovim', {
-            \ 'branch': 'next',
-            \ 'do': 'bash install.sh && pip3 install neovim --upgrade && pip3 install python-language-server --upgrade && rustup component add rls-preview rust-analysis rust-src --toolchain nightly && cargo +nightly install racer',
-            \ }
 Plug 'terryma/vim-multiple-cursors'
 Plug 'luochen1990/rainbow'
 Plug 'skywind3000/asyncrun.vim', { 'on': ['Asyncrun', 'Run', 'RunSelf'] }
@@ -30,6 +22,7 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'laomafeima/run.vim', { 'on': ['Run', 'RunSelf'] }
 Plug 'laomafeima/osc52yank.vim', { 'on': ['Osc52YankLines', 'Osc52YankSelected'] }
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
 syntax on " 开启语法高亮
@@ -40,6 +33,7 @@ colorscheme default " 使用默认配色
 set t_Co=256 " 开启256色
 set fileencodings=utf-8,gbk,cp936,ucs-bom,utf8 " 文件编码
 set fileformat=unix " 设置文件的兼容格式为unix，避免换行符问题
+set hidden " 设置隐藏
 set tabstop=4 " tab 的宽度
 set expandtab " 用空格代替 tab
 set shiftwidth=4 "自动缩进的时候 tab 的宽度
@@ -56,7 +50,7 @@ set ruler " 在编辑过程中，在右下角显示光标位置的状态行
 set cc=80  " 设置 80 列显示线 
 autocmd FileType qf setlocal nonumber colorcolumn=0 " 设置QuickFix 里面不显示80列线和行号
 autocmd BufReadPost * call setpos(".", getpos("'\"")) " 下次打开时将光标移动到上次位置
-set statusline=%<%n\ %{RemoveCurPath(expand('%'))}\ %m%r%h%w%{(&fenc!=''?&fenc:&enc).':'.&ff}\ %LL\ %Y%=%{GetMyStatusLine()}\ %l,%v\ %p%%\ " 设置状态栏显示项目
+set statusline=%<%n\ %{RemoveCurPath(expand('%'))}\ %m%r%h%w%{(&fenc!=''?&fenc:&enc).':'.&ff}\ %LL\ %Y%=%{StatusDiagnostic()}\ %l,%v\ %p%%\ " 设置状态栏显示项目
 hi VertSplit  cterm=NONE term=NONE gui=NONE " 设置分屏线样式
 " 修改 Markdown 文件中 单个 '_' 高亮的问题
 autocmd FileType markdown syn clear markdownError
@@ -220,21 +214,21 @@ let NERDTreeIgnore = ['.pyc$', '.pyo$', '.class$', '^__pycache__$'] " 隐藏部�
 noremap <silent> <C-B> :Denite file_rec<cr>; " 浏览当前路径下文件
 noremap <silent> <C-F> :Denite grep<cr>; " 搜索当前路径下所有文件
 call denite#custom#map(
-      \ 'insert', '<C-T>', '<denite:do_action:tabopen>', 'noremap')
+            \ 'insert', '<C-T>', '<denite:do_action:tabopen>', 'noremap')
 call denite#custom#map(
-      \ 'insert', '<C-x>', '<denite:do_action:split>', 'noremap')
+            \ 'insert', '<C-x>', '<denite:do_action:split>', 'noremap')
 call denite#custom#map(
-      \ 'insert', '<C-v>', '<denite:do_action:vsplit>', 'noremap')
+            \ 'insert', '<C-v>', '<denite:do_action:vsplit>', 'noremap')
 call denite#custom#map(
-      \ 'normal', 't', '<denite:do_action:tabopen>', 'noremap')
+            \ 'normal', 't', '<denite:do_action:tabopen>', 'noremap')
 call denite#custom#map(
-      \ 'normal', 'x', '<denite:do_action:split>', 'noremap')
+            \ 'normal', 'x', '<denite:do_action:split>', 'noremap')
 call denite#custom#map(
-      \ 'normal', 'v', '<denite:do_action:vsplit>', 'noremap')
+            \ 'normal', 'v', '<denite:do_action:vsplit>', 'noremap')
 call denite#custom#map(
-      \ 'insert', '<C-j>', '<denite:move_to_next_line>', 'noremap')
+            \ 'insert', '<C-j>', '<denite:move_to_next_line>', 'noremap')
 call denite#custom#map(
-      \ 'insert', '<C-k>', '<denite:move_to_previous_line>', 'noremap')
+            \ 'insert', '<C-k>', '<denite:move_to_previous_line>', 'noremap')
 
 " Ripgrep command on grep source
 call denite#custom#var('grep', 'command', ['rg'])
@@ -246,8 +240,8 @@ call denite#custom#var('grep', 'separator', ['--'])
 call denite#custom#var('grep', 'final_opts', [])
 " Change ignore_globs
 call denite#custom#filter('matcher/ignore_globs', 'ignore_globs',
-      \ [ '.git/', '.ropeproject/', '__pycache__/', '*.swp',
-      \   'venv/', 'images/', '*.log.*', '*.min.*', 'img/', 'fonts/'])
+            \ [ '.git/', '.ropeproject/', '__pycache__/', '*.swp',
+            \   'venv/', 'images/', '*.log.*', '*.min.*', 'img/', 'fonts/'])
 
 " Change file_rec command
 call denite#custom#var('file_rec', 'command',
@@ -321,154 +315,118 @@ highlight SignColumn ctermbg=none
 highlight link ALEErrorSign Constant
 highlight link ALEWarningSign LineNr
 
-" echodoc 配置
-set noshowmode
-let g:echodoc_enable_at_startup = 1
+" COC.NVIM 配置
+" 状态栏设置
+function! StatusDiagnostic() abort
+    let info = get(b:, 'coc_diagnostic_info', {})
+    if empty(info) | return '✔' | endif
+    let msgs = []
+    if get(info, 'error', 0)
+        call add(msgs, '!' . info['error'])
+    endif
+    if get(info, 'warning', 0)
+        call add(msgs, '✘' . info['warning'])
+    endif
+    return join(msgs, ' ')
+endfunction
 
-" LSP 配置
-let g:deoplete#enable_at_startup = 0 " 关闭自动开启
-let g:LanguageClient_diagnosticsList = "Location" "数据存储在 location list
-autocmd InsertEnter * call deoplete#enable() " 启动后开启自动补全，加快启动速度
-set completeopt-=preview " 自动补全的时候不显示预览窗口
-" 支持 tab 选择
+set updatetime=300 " 更新时间
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <silent><expr> <TAB>
-		\ pumvisible() ? "\<C-n>" :
-		\ <SID>check_back_space() ? "\<TAB>" :
-		\ deoplete#mappings#manual_complete()
-		function! s:check_back_space() abort "{{{
-		let col = col('.') - 1
-		return !col || getline('.')[col - 1]  =~ '\s'
-		endfunction"}}}
-set hidden
+            \ pumvisible() ? "\<C-n>" :
+            \ <SID>check_back_space() ? "\<TAB>" :
+            \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-let g:LanguageClient_rootMarkers = {
-        \ 'go': ['.git', 'Makefile', 'Cargo.toml', 'go.mod'],
-        \ }
-let g:LanguageClient_serverCommands = {
-            \'python': ['pyls'],
-            \'rust': ['rustup', 'run', 'nightly', 'rls'],
-            \'go': ['go-langserver','-diagnostics','-func-snippet-enabled','-gocodecompletion'],
-            \}
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
 
-let g:LanguageClient_autoStart = 0
-" 在使用 LSP 的时候禁用 ALE
-for LSPTypeItem in keys(g:LanguageClient_serverCommands)
-    execute "autocmd FileType ".LSPTypeItem." :ALEDisableBuffer"
-    " 启动后开启 LSP ，加快启动速度
-    execute "autocmd FileType " . LSPTypeItem . " :LanguageClientStart"
-endfor
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
-let g:LanguageClient_diagnosticsDisplay = {
-            \1: { "name": "Error","texthl": "ALEError", "signText": g:ale_sign_error, "signTexthl": "ALEErrorSign",},
-            \2: { "name": "Warning","texthl": "ALEWarning", "signText": g:ale_sign_warning, "signTexthl": "ALEWarningSign",},
-            \3: { "name": "Information","texthl": "ALEInfo","signText": g:ale_sign_warning,"signTexthl": "ALEInfoSign",},
-            \4: { "name": "Hint","texthl": "ALEInfo","signText": g:ale_sign_warning,"signTexthl": "ALEInfoSign",},
-            \}
+" Use `[c` and `]c` to navigate diagnostics
+nmap <silent> [c <Plug>(coc-diagnostic-prev)
+nmap <silent> ]c <Plug>(coc-diagnostic-next)
 
-let g:LanguageClientLintResult = {} " 每个文件的检查结果
-function! LanguageClientLintStatusLine() abort
-    let l:curBufNr = bufnr("%")
-    call LanguageClientLintStatusLineUpdateLintResult(l:curBufNr)
-    return LanguageClientLintStatusLineStr(l:curBufNr)
+" Remap keys for gotos
+nmap <silent> <C-]> <Plug>(coc-definition)
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
 endfunction
 
-function! LanguageClientLintStatusLineUpdateLintResult(curBufNr) abort
-    let l:msg = getloclist(".")
-    let l:lintResult = {}
-    for l:item in l:msg
-        let l:bufnr = get(l:item, "bufnr")
-        let l:type = get(l:item, "type")
-        if l:bufnr < 1 || (l:type != "E" && l:type != "W")
-            continue
-        endif
-        if has_key(l:lintResult, l:bufnr) == 0
-            let l:lintResult[l:bufnr] = {"E":0, "W":0}
-        endif
-        let l:lintResult[l:bufnr][l:type]+=1
-    endfor
-    for l:bufnrKey in keys(l:lintResult)
-        let g:LanguageClientLintResult[l:bufnrKey] = l:lintResult[l:bufnrKey]
-    endfor
-    if has_key(l:lintResult, a:curBufNr) == 0 && has_key(g:LanguageClientLintResult, a:curBufNr)
-        unlet g:LanguageClientLintResult[a:curBufNr]
-    endif
-endfunction
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
 
-function! LanguageClientLintStatusLineStr(curBufNr) abort
-    if has_key(g:LanguageClientLintResult, a:curBufNr) == 0 || (g:LanguageClientLintResult[a:curBufNr]["E"] == 0 && g:LanguageClientLintResult[a:curBufNr]["W"] == 0)
-        return g:ale_statusline_format[2]
-    else
-        return MakeStatusLineStr(g:LanguageClientLintResult[a:curBufNr]["E"], g:LanguageClientLintResult[a:curBufNr]["W"])
-    endif
-endfunction
+" Remap for rename current word
+nmap <leader>rn <Plug>(coc-rename)
 
-function! MakeStatusLineStr(errno, warno) abort
-    if a:errno == 0 && a:warno == 0
-        return g:ale_statusline_format[2]
-    else
-        let l:str = ""
-        if a:errno > 0
-            let l:str .= printf(g:ale_statusline_format[0], a:errno)
-        endif
-        if a:warno > 0
-            let l:str .= printf(g:ale_statusline_format[1], a:warno)
-        endif
-        return l:str
-    endif
-endfunction
+" Remap for format selected region
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
 
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
 
-function! ALELinterStatus() abort
-    let l:counts = ale#statusline#Count(bufnr(''))
-    let l:all_errors = l:counts.error + l:counts.style_error
-    let l:all_non_errors = l:counts.total - l:all_errors
-    return MakeStatusLineStr(all_errors, all_non_errors)
-endfunction
+" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
 
-" 兼容 ALE 和 LSP
-function! GetMyStatusLine() abort
-    " 状态栏显示语法信息，同时支持 LSP 和 ALE
-    if index(keys(g:LanguageClient_serverCommands), &filetype) > -1
-        return LanguageClientLintStatusLine()
-    else
-        return ALELinterStatus()
-endfunction
+" Remap for do codeAction of current line
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Fix autofix problem of current line
+nmap <leader>qf  <Plug>(coc-fix-current)
 
-function! MyErrorNext() abort
-    if index(keys(g:LanguageClient_serverCommands), &filetype) > -1
-        try
-            execute "lne"
-        catch /E553:
-            execute "lr"
-        endtry
-    else
-        execute "normal \<Plug>(ale_next_wrap)"
-    endif
-endfunction
-function! MyErrorPrev() abort
-    if index(keys(g:LanguageClient_serverCommands), &filetype) > -1
-        try
-            execute "lp"
-        catch /E553:
-            execute "lla"
-        endtry
-    else
-        execute "normal \<Plug>(ale_previous_wrap)"
-    endif
-endfunction
+" Use <tab> for select selections ranges, needs server support, like: coc-tsserver, coc-python
+nmap <silent> <TAB> <Plug>(coc-range-select)
+xmap <silent> <TAB> <Plug>(coc-range-select)
+xmap <silent> <S-TAB> <Plug>(coc-range-select-backword)
 
-function! TextDocumentHoverToggle() abort
-    try
-        execute "wincmd P"
-        execute "pclose"
-    catch /E441:
-        call LanguageClient_textDocument_hover()
-    endtry
-endfunction
+" Use `:Format` to format current buffer
+command! -nargs=0 Format :call CocAction('format')
 
-nnoremap <silent> <Leader>H :call TextDocumentHoverToggle()<CR>
-nnoremap <silent> <C-]> :call LanguageClient_textDocument_definition()<CR>
-" 查看当前方法属性的所有引用
-nnoremap <silent> <Leader>ref :call LanguageClient_textDocument_references() <bar> :lli<cr>
-nnoremap <silent> <Leader>ep :call MyErrorPrev()<cr>; " 跳转到上一个错误/引用
-nnoremap <silent> <Leader>en :call MyErrorNext()<cr>; " 跳转到下一个错误/引用
+" Use `:Fold` to fold current buffer
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" use `:OR` for organize import of current buffer
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+" Using CocList
+" Show all diagnostics
+nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions
+nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+" Show commands
+nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document
+nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols
+" nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list
+nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
