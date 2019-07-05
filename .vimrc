@@ -13,7 +13,7 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'cespare/vim-toml', { 'for': 'toml' }
 Plug 'Yggdroot/indentLine', { 'on':  'IndentLinesToggle' }
 Plug 'Shougo/denite.nvim'
-Plug 'terryma/vim-multiple-cursors'
+Plug 'mg979/vim-visual-multi'
 Plug 'luochen1990/rainbow'
 Plug 'skywind3000/asyncrun.vim', { 'on': ['Asyncrun', 'Run', 'RunSelf'] }
 Plug 'w0rp/ale'
@@ -152,7 +152,7 @@ set tabline=%!MyTabLine()
 " 设置 tab bar 颜色
 hi TabLineFill ctermfg=black ctermbg=black
 hi TabLine ctermfg=gray ctermbg=black cterm=none
-hi TabLineSel ctermfg=darkgreen ctermbg=black
+hi TabLineSel ctermfg=darkgreen ctermbg=black cterm=bold
 
 "  标签页快捷键设置
 noremap <silent><C-T> :tabnew<cr>
@@ -291,15 +291,6 @@ function! SetYankMap()
     endif
     nnoremap P "*p
 endfunction
-
-" vim-multiple-cursors 配置
-function! g:Multiple_cursors_before()
-    let g:deoplete#disable_auto_complete = 1
-endfunction
-function! g:Multiple_cursors_after()
-    let g:deoplete#disable_auto_complete = 0
-endfunction
-set selection=inclusive
 
 " 彩虹括号
 let g:rainbow_active = 1
