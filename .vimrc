@@ -17,12 +17,11 @@ Plug 'Yggdroot/indentLine', { 'on':  'IndentLinesToggle' }
 Plug 'Shougo/denite.nvim'
 Plug 'mg979/vim-visual-multi'
 Plug 'luochen1990/rainbow'
-Plug 'skywind3000/asyncrun.vim', { 'on': ['Asyncrun', 'Run', 'RunSelf'] }
-Plug 'w0rp/ale'
 Plug 'easymotion/vim-easymotion'
 Plug 'jiangmiao/auto-pairs'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'laomafeima/run.vim', { 'on': ['Run', 'RunSelf'] }
+Plug 'skywind3000/asyncrun.vim'
+Plug 'laomafeima/run.vim'
 Plug 'laomafeima/osc52yank.vim', { 'on': ['Osc52YankLines', 'Osc52YankSelected'] }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
@@ -59,6 +58,7 @@ autocmd FileType markdown syn clear markdownError
 autocmd FileType markdown syn match markdownErrorNotDisplay "\w\@<=_\w\@="
 au BufRead,BufNewFile *.php set indentexpr= | set smartindent " 针对 PHP 禁用基于 PHP 语法的缩进
 autocmd FileType go set formatoptions+=r " 针对 Golang 的注释优化
+highlight SignColumn ctermbg=none " 移除侧边栏背景色
 
 noremap <silent> <C-P> <C-W>p; " 两个窗口之间来回跳转
 " Ctrl-C 映射为 Esc 按键方便无 Esc 按键键盘
@@ -275,10 +275,6 @@ let g:indentLine_char = '|'
 " nmap <silent> <C-I> :IndentLinesToggle<cr>" Ctrl I开启关闭对齐线
 
 " Run.vim
-" 快捷输入
-command! -nargs=? R Run <f-args>
-command! -nargs=? T Run test
-nmap <leader>t :T<CR>
 autocmd FileType qf nmap <silent> <C-C> :RunStop<CR>; " QuickFix 框 Ctrl C 停止异步运行，非运行时会关闭 QuickFix
 
 " OSC52Yank
@@ -297,16 +293,6 @@ endfunction
 " 彩虹括号
 let g:rainbow_active = 1
 let g:rainbow_conf = {'guifgs': ['red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'purple'], 'ctermfgs': ['red', 'darkyellow', 'yellow', 'green', 'cyan', 'blue', 'darkmagenta'],}
-
-" ALE 配置
-let g:ale_statusline_format = ['✘%d', '!%d', '✔']
-let g:ale_lint_on_save = 1
-let g:ale_lint_on_text_changed = 1
-let g:ale_sign_error = '>>'
-let g:ale_sign_warning = '>>'
-highlight SignColumn ctermbg=none
-highlight link ALEErrorSign Constant
-highlight link ALEWarningSign LineNr
 
 " COC.NVIM 配置
 " 状态栏设置
