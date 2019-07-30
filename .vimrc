@@ -301,15 +301,15 @@ function! StatusDiagnostic() abort
     if empty(info) | return '✔' | endif
     let msgs = []
     if get(info, 'error', 0)
-        call add(msgs, '!' . info['error'])
+        call add(msgs, '✘' . info['error'])
     endif
     if get(info, 'warning', 0)
-        call add(msgs, '✘' . info['warning'])
+        call add(msgs, '!' . info['warning'])
     endif
     return join(msgs, ' ')
 endfunction
 
-set updatetime=300 " 更新时间
+" set updatetime=300 " 更新时间
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <silent><expr> <TAB>
@@ -352,7 +352,7 @@ function! s:show_documentation()
 endfunction
 
 " Highlight symbol under cursor on CursorHold
-autocmd CursorHold * silent call CocActionAsync('highlight')
+" autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
