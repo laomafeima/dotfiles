@@ -52,6 +52,7 @@ set cc=80  " 设置 80 列显示线
 autocmd FileType qf setlocal nonumber colorcolumn=0 " 设置QuickFix 里面不显示80列线和行号
 autocmd BufReadPost * call setpos(".", getpos("'\"")) " 下次打开时将光标移动到上次位置
 set statusline=%<%n\ %{RemoveCurPath(expand('%'))}\ %m%r%h%w%{(&fenc!=''?&fenc:&enc).':'.&ff}\ %LL\ %Y%=%{StatusDiagnostic()}\ %l,%v\ %p%%\ " 设置状态栏显示项目
+set fillchars+=vert:│ " 设置分屏为直线
 hi VertSplit  cterm=NONE term=NONE gui=NONE " 设置分屏线样式
 " 修改 Markdown 文件中 单个 '_' 高亮的问题
 autocmd FileType markdown syn clear markdownError
@@ -61,18 +62,6 @@ autocmd FileType go set formatoptions+=r " 针对 Golang 的注释优化
 highlight SignColumn ctermbg=none " 移除侧边栏背景色
 
 noremap <silent> <C-P> <C-W>p; " 两个窗口之间来回跳转
-" Ctrl-C 映射为 Esc 按键方便无 Esc 按键键盘
-inoremap <C-C> <ESC>
-
-if has('gui_running')
-    set guioptions-=T " 隐藏菜单栏
-    set guioptions-=m " 隐藏菜单栏
-    set guioptions-=L " 隐藏左侧滚动条
-    set guioptions-=r " 隐藏右侧滚动条
-    set guioptions-=e " 使用命令行下标签页样式
-    set lines=30 columns=110 " 设置启动时窗口大小
-endif
-
 
 " 进入插入模式时改变状态栏颜色
 autocmd InsertEnter * hi StatusLine guibg=red guifg=black gui=none ctermbg=red ctermfg=black cterm=none
@@ -141,7 +130,18 @@ function! MyTabLine()
             let s .= '%#TabLine#'
         endif
         let s .= '%' . (i + 1) . 'T'
-        let s .= ' %{MyTabLabel(' . (i + 1) . ')} '
+        " 选中标签中间高亮
+        if i == 0 && tabpagenr() == 2
+            let s .= '%{MyTabLabel(' . (i + 1) . ')} | '
+        elseif i == 0
+            let s .= '%{MyTabLabel(' . (i + 1) . ')}'
+        elseif i + 2 == tabpagenr()
+            let s .= ' | %{MyTabLabel(' . (i + 1) . ')} | '
+        elseif i + 1 == tabpagenr()
+            let s .= '%{MyTabLabel(' . (i + 1) . ')}'
+        else
+            let s .= ' | %{MyTabLabel(' . (i + 1) . ')}'
+        endif
     endfor
     let s .= '%#TabLineFill#%T'
     if tabpagenr('$') > 1
