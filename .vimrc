@@ -154,7 +154,7 @@ set tabline=%!MyTabLine()
 " 设置 tab bar 颜色
 hi TabLineFill ctermfg=black ctermbg=black
 hi TabLine ctermfg=gray ctermbg=black cterm=none
-hi TabLineSel ctermfg=darkgreen ctermbg=black cterm=bold
+hi TabLineSel ctermfg=green ctermbg=black cterm=bold
 
 "  标签页快捷键设置
 noremap <silent><C-T> :tabnew<cr>
