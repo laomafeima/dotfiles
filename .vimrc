@@ -7,14 +7,11 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 call plug#begin('~/.vim/plugged')
 " 插件列表
-Plug 'roxma/nvim-yarp'
-Plug 'roxma/vim-hug-neovim-rpc'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'jistr/vim-nerdtree-tabs', { 'on':  'NERDTreeToggle' }
 Plug 'scrooloose/nerdcommenter'
 Plug 'cespare/vim-toml', { 'for': 'toml' }
 Plug 'Yggdroot/indentLine', { 'on':  'IndentLinesToggle' }
-Plug 'Shougo/denite.nvim'
 Plug 'mg979/vim-visual-multi'
 Plug 'luochen1990/rainbow'
 Plug 'easymotion/vim-easymotion'
@@ -212,46 +209,6 @@ let g:NERDTreeMapJumpNextSibling = '' " 禁止 ctrl j 快捷键
 let g:NERDTreeMapJumpPrevSibling = '' " 禁止 ctrl k 快捷键
 let NERDTreeIgnore = ['.pyc$', '.pyo$', '.class$', '^__pycache__$'] " 隐藏部分后缀文件
 
-" Denite 配置
-noremap <silent> <C-B> :Denite file_rec<cr>; " 浏览当前路径下文件
-noremap <silent> <C-F> :Denite grep<cr>; " 搜索当前路径下所有文件
-call denite#custom#map(
-            \ 'insert', '<C-T>', '<denite:do_action:tabopen>', 'noremap')
-call denite#custom#map(
-            \ 'insert', '<C-x>', '<denite:do_action:split>', 'noremap')
-call denite#custom#map(
-            \ 'insert', '<C-v>', '<denite:do_action:vsplit>', 'noremap')
-call denite#custom#map(
-            \ 'normal', 't', '<denite:do_action:tabopen>', 'noremap')
-call denite#custom#map(
-            \ 'normal', 'x', '<denite:do_action:split>', 'noremap')
-call denite#custom#map(
-            \ 'normal', 'v', '<denite:do_action:vsplit>', 'noremap')
-call denite#custom#map(
-            \ 'insert', '<C-j>', '<denite:move_to_next_line>', 'noremap')
-call denite#custom#map(
-            \ 'insert', '<C-k>', '<denite:move_to_previous_line>', 'noremap')
-
-" Ripgrep command on grep source
-call denite#custom#var('grep', 'command', ['rg'])
-call denite#custom#var('grep', 'default_opts',
-            \ ['--vimgrep', '--no-heading'])
-call denite#custom#var('grep', 'recursive_opts', [])
-call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
-call denite#custom#var('grep', 'separator', ['--'])
-call denite#custom#var('grep', 'final_opts', [])
-" Change ignore_globs
-call denite#custom#filter('matcher/ignore_globs', 'ignore_globs',
-            \ [ '.git/', '.ropeproject/', '__pycache__/', '*.swp',
-            \   'venv/', 'images/', '*.log.*', '*.min.*', 'img/', 'fonts/'])
-
-" Change file_rec command
-call denite#custom#var('file_rec', 'command',
-            \ ['rg', '--files', '--glob', '!.git'])
-
-" Change default prompt
-call denite#custom#option('default', 'prompt', '>')
-
 " 添加注释的时候增加一个空格
 let g:NERDSpaceDelims = 1
 
@@ -310,6 +267,9 @@ function! StatusDiagnostic() abort
 endfunction
 
 " set updatetime=300 " 更新时间
+" 默认 coc 插件
+let g:coc_global_extensions = ["coc-lists", "coc-python", "coc-rls"]
+
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <silent><expr> <TAB>
@@ -393,19 +353,6 @@ command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
 
 " Using CocList
-" Show all diagnostics
-nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
-" Manage extensions
-nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
-" Show commands
-nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
-" Find symbol of current document
-nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
-" Search workspace symbols
-" nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
-" Do default action for next item.
-nnoremap <silent> <space>j  :<C-u>CocNext<CR>
-" Do default action for previous item.
-nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
-" Resume latest coc list
-nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+noremap <silent> <C-B> :CocList files<cr>; " 浏览当前路径下文件
+" 全局搜索
+noremap <silent> <C-F> :exe 'CocList grep '.input('Find: ')<CR>
