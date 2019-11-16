@@ -268,7 +268,7 @@ endfunction
 
 " set updatetime=300 " 更新时间
 " 默认 coc 插件
-let g:coc_global_extensions = ["coc-lists", "coc-python", "coc-rls"]
+let g:coc_global_extensions = ["coc-lists", "coc-python", "coc-rust-analyzer"]
 
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
