@@ -232,7 +232,7 @@ let g:indentLine_char = '|'
 " nmap <silent> <C-I> :IndentLinesToggle<cr>" Ctrl I开启关闭对齐线
 
 " Run.vim
-autocmd FileType qf nmap <silent> <C-C> :RunStop<CR>; " QuickFix 框 Ctrl C 停止异步运行，非运行时会关闭 QuickFix
+autocmd FileType qf nmap <silent> <C-C> :RS<CR>; " QuickFix 框 Ctrl C 停止异步运行，非运行时会关闭 QuickFix
 
 " OSC52Yank
 autocmd VimEnter * call SetYankMap()
