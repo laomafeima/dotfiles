@@ -69,7 +69,8 @@ hi StatusLine guibg=green guifg=black gui=none ctermbg=green ctermfg=black cterm
 hi Visual term=reverse ctermbg=DarkGrey guibg=LightGrey
 
 " 设置菜单颜色
-hi CursorLine ctermbg=darkgray cterm=none " 高亮当前行
+hi CursorLine ctermbg=darkgray cterm=none term=none " 高亮当前行
+hi CursorLineNr term=bold cterm=bold gui=bold " 高亮当前行
 autocmd BufWinEnter,WinEnter,BufEnter *  setlocal cursorline " 自动启动高亮当前行
 autocmd BufWinLeave,WinLeave,BufLeave *  setlocal nocursorline " 自动取消高亮当前行
 hi ColorColumn ctermbg=darkgray guibg=darkgray " 设置80 列 线的颜色
@@ -191,7 +192,7 @@ noremap # #:set hlsearch<cr>
 
 " NerdTree 配置
 function! g:MyNERDTreeToggle()
-    if exists(":NERDTreeMirrorToggle") 
+    if exists(":NERDTreeMirrorToggle")
         execute ":NERDTreeMirrorToggle"
     else
         execute ":NERDTreeToggle"
@@ -199,7 +200,7 @@ function! g:MyNERDTreeToggle()
 endfunction
 
 command! -nargs=0 MyNERDTreeToggle call g:MyNERDTreeToggle()
-nmap <silent> <C-E> :MyNERDTreeToggle<CR>; " Ctrl+E 开启和关闭 NERDTree 
+nmap <silent> <C-E> :MyNERDTreeToggle<CR>; " Ctrl+E 开启和关闭 NERDTree
 let NERDTreeShowBookmarks=1 " 默认显示书签
 let NERDTreeWinSize=24 " 设置目录窗口宽度
 let g:nerdtree_tabs_focus_on_files=1 " 设置 打开文件后文件窗口获得焦点
@@ -270,28 +271,36 @@ endfunction
 " 默认 coc 插件
 let g:coc_global_extensions = ["coc-lists", "coc-python", "coc-rust-analyzer"]
 
+" Using CocList
+noremap <silent> <C-B> :CocList files<cr>; " 浏览当前路径下文件
+" 全局搜索
+noremap <silent> <C-F> :exe 'CocList grep '.input('Find: ')<CR>
+
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <silent><expr> <TAB>
-            \ pumvisible() ? "\<C-n>" :
-            \ <SID>check_back_space() ? "\<TAB>" :
-            \ coc#refresh()
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
 " Coc only does snippet and additional edit on confirm.
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" Or use `complete_info` if your vim support it, like:
+" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 
-" Use `[c` and `]c` to navigate diagnostics
-nmap <silent> [c <Plug>(coc-diagnostic-prev)
-nmap <silent> ]c <Plug>(coc-diagnostic-next)
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
 nmap <silent> <C-]> <Plug>(coc-definition)
@@ -312,7 +321,7 @@ function! s:show_documentation()
 endfunction
 
 " Highlight symbol under cursor on CursorHold
-" autocmd CursorHold * silent call CocActionAsync('highlight')
+autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
@@ -338,10 +347,11 @@ nmap <leader>ac  <Plug>(coc-codeaction)
 " Fix autofix problem of current line
 nmap <leader>qf  <Plug>(coc-fix-current)
 
-" Use <tab> for select selections ranges, needs server support, like: coc-tsserver, coc-python
-nmap <silent> <TAB> <Plug>(coc-range-select)
-xmap <silent> <TAB> <Plug>(coc-range-select)
-xmap <silent> <S-TAB> <Plug>(coc-range-select-backword)
+" Create mappings for function text object, requires document symbols feature of languageserver.
+xmap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap if <Plug>(coc-funcobj-i)
+omap af <Plug>(coc-funcobj-a)
 
 " Use `:Format` to format current buffer
 command! -nargs=0 Format :call CocAction('format')
@@ -353,6 +363,19 @@ command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
 
 " Using CocList
-noremap <silent> <C-B> :CocList files<cr>; " 浏览当前路径下文件
-" 全局搜索
-noremap <silent> <C-F> :exe 'CocList grep '.input('Find: ')<CR>
+" Show all diagnostics
+nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions
+nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+" Show commands
+nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document
+nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols
+nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list
+nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
