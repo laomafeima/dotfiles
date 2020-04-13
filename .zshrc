@@ -1,5 +1,5 @@
 # Automatic installation
-if [[ ! -e /bin/zsh ]] {
+if [[ ! -e $HOME/.zsh ]] {
     mkdir -p "$HOME/.zsh"
     git clone https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure"
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$HOME/.zsh/zsh-syntax-highlighting"
@@ -8,6 +8,9 @@ if [[ ! -e /bin/zsh ]] {
 
 # upgrade zsh plugin
 alias upgrade_zsh_plugin="ls $HOME/.zsh/ | xargs -I{} git -C $HOME/.zsh/{} pull"
+
+# python
+export PYTHONDONTWRITEBYTECODE=1
 
 # awesome alias
 if ls --color > /dev/null 2>&1; then # GNU `ls`
