@@ -6,6 +6,8 @@ if [[ ! -e $HOME/.zsh ]] {
     git clone https://github.com/skywind3000/z.lua.git "$HOME/.zsh/z.lua"
 }
 
+source $HOME/.profile
+
 # upgrade zsh plugin
 alias upgrade_zsh_plugin="ls $HOME/.zsh/ --color=none | xargs -I{} git -C $HOME/.zsh/{} pull"
 
