@@ -7,7 +7,7 @@ if [[ ! -e $HOME/.zsh ]] {
 }
 
 # upgrade zsh plugin
-alias upgrade_zsh_plugin="ls $HOME/.zsh/ | xargs -I{} git -C $HOME/.zsh/{} pull"
+alias upgrade_zsh_plugin="ls $HOME/.zsh/ --color=none | xargs -I{} git -C $HOME/.zsh/{} pull"
 
 # python
 export PYTHONDONTWRITEBYTECODE=1
