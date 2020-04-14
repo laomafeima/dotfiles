@@ -36,6 +36,8 @@ alias chown='chown --preserve-root'
 alias chmod='chmod --preserve-root'
 alias chgrp='chgrp --preserve-root'
 
+alias how="tldr"
+
 
 # theme
 fpath+=$HOME/.zsh/pure
