@@ -48,7 +48,7 @@ set ruler " 在编辑过程中，在右下角显示光标位置的状态行
 set cc=80  " 设置 80 列显示线 
 autocmd FileType qf setlocal nonumber colorcolumn=0 " 设置QuickFix 里面不显示80列线和行号
 autocmd BufReadPost * call setpos(".", getpos("'\"")) " 下次打开时将光标移动到上次位置
-set statusline=%<%n\ %{RemoveCurPath(expand('%'))}\ %m%r%h%w%{(&fenc!=''?&fenc:&enc).':'.&ff}\ %LL\ %Y%=%{StatusDiagnostic()}\ %l,%v\ %p%%\ " 设置状态栏显示项目
+set statusline=%<%n\ %{RemoveCurPath(expand('%'))}\ %m%r%h%w%{(&fenc!=''?&fenc:&enc).':'.&ff}\ %LL%{CharCount()}\ %Y%=%{StatusDiagnostic()}\ %l,%v\ %p%%\ " 设置状态栏显示项目
 set fillchars+=vert:│ " 设置分屏为直线
 hi VertSplit  cterm=NONE term=NONE gui=NONE " 设置分屏线样式
 " 修改 Markdown 文件中 单个 '_' 高亮的问题
@@ -76,6 +76,16 @@ autocmd BufWinLeave,WinLeave,BufLeave *  setlocal nocursorline " 自动取消高
 hi ColorColumn ctermbg=darkgray guibg=darkgray " 设置80 列 线的颜色
 hi Pmenu guibg=darkslategray ctermbg=lightgray " 下拉菜单的颜色
 hi PmenuSel ctermfg=white ctermbg=darkgray guibg=Grey cterm=bold
+
+" markdown 文档显示字数
+function! CharCount()
+    if tolower(&filetype) == "markdown"
+        let wordcount = wordcount()
+        return " " . wordcount["chars"] . "C"
+    else
+        return ""
+    endif
+endfunction
 
 " 移除当前目录路径
 function! RemoveCurPath(name)
