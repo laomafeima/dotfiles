@@ -19,7 +19,7 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'laomafeima/run.vim'
-Plug 'laomafeima/osc52yank.vim', { 'on': ['Osc52YankLines', 'Osc52YankSelected'] }
+Plug 'laomafeima/cfrtl.vim', { 'on': ['CopyLines', 'CopySelected'] }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
@@ -235,12 +235,12 @@ let g:indentLine_char = '|'
 " Run.vim
 autocmd FileType qf nmap <silent> <C-C> :RS<CR>; " QuickFix 框 Ctrl C 停止异步运行，非运行时会关闭 QuickFix
 
-" OSC52Yank
-autocmd VimEnter * call SetYankMap()
-function! SetYankMap()
+" cfrtl.vim
+autocmd VimEnter * call SetCopyMap()
+function! SetCopyMap()
     if getregtype("*") == ""
-        vnoremap Y :Osc52YankSelected<cr>
-        nnoremap Y :Osc52YankLines<cr>
+        vnoremap Y :CopySelected<cr>
+        nnoremap Y :CopyLines<cr>
     else
         vnoremap Y "*y
         nnoremap Y "*yy
