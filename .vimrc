@@ -279,7 +279,7 @@ endfunction
 
 " set updatetime=300 " 更新时间
 " 默认 coc 插件
-let g:coc_global_extensions = ["coc-lists", "coc-python", "coc-rust-analyzer"]
+let g:coc_global_extensions = ["coc-lists", "coc-python", "coc-go", "coc-rust-analyzer"]
 
 " Using CocList
 noremap <silent> <C-B> :CocList files<cr>; " 浏览当前路径下文件
