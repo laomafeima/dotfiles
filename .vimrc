@@ -19,7 +19,7 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'laomafeima/run.vim'
-Plug 'laomafeima/cfrtl.vim', { 'on': ['CopyLines', 'CopySelected'] }
+Plug 'laomafeima/cfrl.vim', { 'on': ['CopyLines', 'CopySelected'] }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
@@ -245,7 +245,7 @@ let g:indentLine_char = '|'
 " Run.vim
 autocmd FileType qf nmap <silent> <C-C> :RS<CR>; " QuickFix 框 Ctrl C 停止异步运行，非运行时会关闭 QuickFix
 
-" cfrtl.vim
+" cfrl.vim
 autocmd VimEnter * call SetCopyMap()
 function! SetCopyMap()
     if getregtype("*") == ""
