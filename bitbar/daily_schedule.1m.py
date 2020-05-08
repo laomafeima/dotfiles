@@ -61,10 +61,12 @@ now = datetime.datetime.now()
 for hour, minutes in schedule.items():
     if now.hour >= hour:
         for minute, tasks in minutes.items():
-            if now.minute >= minute:
+            if now.hour * 100 + now.minute >= hour * 100 + minute:
                 for task in tasks:
                     print(task)
-            break
+                break
+            else:
+                continue
         break
     else:
         continue
