@@ -14,7 +14,10 @@ schedule = {
     },
     19: {
         30: ["👨🏻‍💻✍️", "---", "LeetCode|href=https://leetcode.com"],
-        0: ["🍜🚇"]
+        0: ["🚇👨🏻‍💻"]
+    },
+    18: {
+        30: ["🍜👨🏻‍💻", "---", "LeetCode|href=https://leetcode.com"],
     },
     16: {
         0: [
@@ -61,6 +64,7 @@ for hour, minutes in schedule.items():
             if now.minute >= minute:
                 for task in tasks:
                     print(task)
+            break
         break
     else:
         continue

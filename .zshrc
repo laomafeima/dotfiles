@@ -8,6 +8,9 @@ if [[ ! -e $HOME/.zsh ]] {
 
 source $HOME/.profile
 
+# emoji
+setopt COMBINING_CHARS
+
 # upgrade zsh plugin
 alias upgrade_zsh_plugin="ls $HOME/.zsh/ --color=none | xargs -I{} git -C $HOME/.zsh/{} pull"
 
