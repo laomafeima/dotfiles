@@ -43,8 +43,8 @@ promptinit
 
 # change the color
 zstyle ':prompt:pure:git:branch' color magenta
-zstyle ':prompt:pure:host' color 065
-zstyle ':prompt:pure:user' color 065
+zstyle ':prompt:pure:host' color green
+zstyle ':prompt:pure:user' color green
 
 # turn on git stash status
 zstyle :prompt:pure:git:stash show yes
