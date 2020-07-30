@@ -5,7 +5,7 @@ if [[ ! -e $HOME/.zsh ]] {
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$HOME/.zsh/zsh-syntax-highlighting"
     git clone https://github.com/skywind3000/z.lua.git "$HOME/.zsh/z.lua"
 }
-
+setopt IGNORE_EOF # 关闭 control + D 关闭 shell 
 source $HOME/.profile
 
 # emoji
