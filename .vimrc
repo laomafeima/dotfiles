@@ -26,7 +26,7 @@ call plug#end()
 syntax on " 开启语法高亮
 filetype on " 自动检测文件类型
 filetype plugin indent on " 插件文件类型和缩进
-set mouse= " 禁止鼠标
+set mouse=a " 启用鼠标
 colorscheme default " 使用默认配色
 set t_Co=256 " 开启256色
 set fileencodings=utf-8,gbk,cp936,ucs-bom,utf8 " 文件编码
