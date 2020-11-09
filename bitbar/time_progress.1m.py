@@ -15,4 +15,29 @@ week_progress = round((now.weekday() * DAY_MINUTES + day_passed_minute) / (7 * D
 year_days = datetime.datetime(now.year + 1, 1, 1) - datetime.datetime(now.year, 1, 1)
 year_progress = round((now - datetime.datetime(now.year, 1, 1)) / year_days, 2)
 
-print("{}% {}%".format(int(day_progress * 100), int(week_progress * 100)))
+days_left = datetime.datetime(now.year + 1, 1, 1)  - now
+print("{} days".format(days_left.days))
+# 番茄计数
+print("---")
+deadline = [
+        {"hour": 10, "minute": 00},
+        {"hour": 10, "minute": 40},
+        {"hour": 11, "minute": 20},
+        {"hour": 12, "minute": 00},
+        {"hour": 14, "minute": 00},
+        {"hour": 14, "minute": 40},
+        {"hour": 15, "minute": 20},
+        {"hour": 16, "minute": 00},
+        {"hour": 16, "minute": 40},
+        {"hour": 17, "minute": 20},
+        ]
+
+tomatos = ""
+for i in deadline:
+    if now.hour * 60 + now.minute >= i["hour"] * 60 + i["minute"]:
+        if len(tomatos) >= 4:
+            tomatos += "🍅"
+        else:
+            tomatos += "🍏"
+
+print(tomatos + " " + str(len(tomatos)))
