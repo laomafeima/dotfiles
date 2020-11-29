@@ -26,7 +26,7 @@ else # OS X `ls`
     LS_COLORS="Gxfxcxdxbxegedabagacad"
 fi
 alias l="ls"
-alias ll="ls -al"
+alias ll="ls -alhF"
 alias ls="ls ${colorflag}"
 
 alias ..="cd .."
