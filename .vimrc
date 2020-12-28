@@ -182,10 +182,11 @@ noremap <silent><s-tab> :tabnext<CR>
 inoremap <silent><s-tab> <ESC>:tabnext<CR>
 
 " 关闭方向键, 强迫自己用 hjkl
-map <Left> :echoe "Use 'h'"<CR>
-map <Right> :echoe "Use 'l'"<CR>
-map <Up> :echoe "Use 'j'"<CR>
-map <Down> :echoe "Use 'k'"<CR>
+map <Left> :echoe "Use 'h'."<CR>
+map <Right> :echoe "Use 'l'."<CR>
+map <Up> :echoe "Use 'j'."<CR>
+map <Down> :echoe "Use 'k'."<CR>
+map <C-C> :echoe "What are you doing? This is Vim."<CR>
 
 set incsearch " 搜索结果实时显示
 " 禁用高亮
