@@ -283,7 +283,7 @@ endfunction
 " 默认 coc 插件
 
 set shortmess+=c " Don't pass messages to |ins-completion-menu|.
-let g:coc_global_extensions = ["coc-lists", "coc-python", "coc-go"]
+let g:coc_global_extensions = ["coc-lists", "coc-pyright", "coc-go"]
 
 " Using CocList
 noremap <silent> <C-B> :CocList files<cr>; " 浏览当前路径下文件
