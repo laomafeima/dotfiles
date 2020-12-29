@@ -283,6 +283,15 @@ endfunction
 " set updatetime=300 " 更新时间
 " 默认 coc 插件
 
+" 使用 coc.nvim 统一配置
+" ~/.vim/coc-settings.json 对当前用户下所有项目生效
+"{
+"    "python.linting.flake8Path": "/home/ma/.local/bin/flake8", 
+"    `which flake8` 获取当前路径
+"    "python.linting.flake8Enabled": true
+"}
+"
+
 set shortmess+=c " Don't pass messages to |ins-completion-menu|.
 let g:coc_global_extensions = ["coc-lists", "coc-pyright", "coc-go"]
 
