@@ -5,7 +5,7 @@ if [[ ! -e $HOME/.zsh ]] {
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$HOME/.zsh/zsh-syntax-highlighting"
     git clone https://github.com/skywind3000/z.lua.git "$HOME/.zsh/z.lua"
     # install scripts
-    curl https://raw.githubusercontent.com/docker/cli/master/contrib/completion/zsh/_docker > _docker
+    curl https://raw.githubusercontent.com/docker/cli/master/contrib/completion/zsh/_docker > $HOME/.zsh/scripts/_docker
 }
 setopt IGNORE_EOF # 关闭 control + D 关闭 shell 
 source $HOME/.profile
@@ -16,7 +16,7 @@ setopt COMBINING_CHARS
 # upgrade zsh plugin
 function upgrade_zsh_plugin() {
     ls $HOME/.zsh/ | grep -v scripts | xargs -I{} git -C $HOME/.zsh/{} pull
-    curl https://raw.githubusercontent.com/docker/cli/master/contrib/completion/zsh/_docker > _docker
+    curl https://raw.githubusercontent.com/docker/cli/master/contrib/completion/zsh/_docker > $HOME/.zsh/scripts/_docker
 }
 
 # python
