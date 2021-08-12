@@ -1,9 +1,11 @@
 # Automatic installation
 if [[ ! -e $HOME/.zsh ]] {
-    mkdir -p "$HOME/.zsh"
+    mkdir -p "$HOME/.zsh/scripts"
     git clone https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure"
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$HOME/.zsh/zsh-syntax-highlighting"
     git clone https://github.com/skywind3000/z.lua.git "$HOME/.zsh/z.lua"
+    # install scripts
+    curl https://raw.githubusercontent.com/docker/cli/master/contrib/completion/zsh/_docker > _docker
 }
 setopt IGNORE_EOF # 关闭 control + D 关闭 shell 
 source $HOME/.profile
@@ -12,7 +14,10 @@ source $HOME/.profile
 setopt COMBINING_CHARS
 
 # upgrade zsh plugin
-alias upgrade_zsh_plugin="ls $HOME/.zsh/ --color=none | xargs -I{} git -C $HOME/.zsh/{} pull"
+function upgrade_zsh_plugin() {
+    ls $HOME/.zsh/ | grep -v scripts | xargs -I{} git -C $HOME/.zsh/{} pull
+    curl https://raw.githubusercontent.com/docker/cli/master/contrib/completion/zsh/_docker > _docker
+}
 
 # python
 export PYTHONDONTWRITEBYTECODE=1
@@ -35,6 +40,8 @@ alias ....="cd ../../.."
 
 alias how="tldr"
 
+# scripts install
+fpath+=$HOME/.zsh/scripts
 
 # theme
 fpath+=$HOME/.zsh/pure
@@ -62,7 +69,7 @@ bindkey -e
 # Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
 HISTSIZE=1000
 SAVEHIST=1000
-HISTFILE=~/.zsh_history
+HISTFILE=$HOME/.zsh_history
 
 # Use modern completion system
 autoload -Uz compinit
@@ -84,7 +91,7 @@ zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
 # z.lua 
-eval "$(lua ~/.zsh/z.lua/z.lua  --init zsh)"
+eval "$(lua $HOME/.zsh/z.lua/z.lua  --init zsh)"
 
 # syntax-highlighting
-source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
