@@ -27,12 +27,12 @@ function upgrade_zsh_plugin() {
 export PYTHONDONTWRITEBYTECODE=1
 
 # awesome alias
-if ls --color > /dev/null 2>&1; then # GNU `ls`
-    colorflag="--color"
-    # eval "$(dircolors -b)"
-else # OS X `ls`
+if [[ $OSTYPE =~ "darwin" ]]; then # Mac OS X`ls`
     colorflag="-G"
-    LS_COLORS="Gxfxcxdxbxegedabagacad"
+    # LS_COLORS="Gxfxcxdxbxegedabagacad"
+else # Linux `ls`
+    colorflag="--color"
+    eval "$(dircolors -b)"
 fi
 alias l="ls"
 alias ll="ls -alhF"
