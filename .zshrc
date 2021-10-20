@@ -6,6 +6,8 @@ if [[ ! -e $HOME/.zsh ]] {
     git clone https://github.com/skywind3000/z.lua.git "$HOME/.zsh/z.lua"
     # install scripts
     curl https://raw.githubusercontent.com/docker/cli/master/contrib/completion/zsh/_docker > $HOME/.zsh/scripts/_docker
+    curl https://raw.githubusercontent.com/zsh-users/zsh-completions/master/src/_golang > $HOME/.zsh/scripts/_golang
+    curl https://raw.githubusercontent.com/zsh-users/zsh-completions/master/src/_httpie > $HOME/.zsh/scripts/_httpie
 }
 setopt IGNORE_EOF # 关闭 control + D 关闭 shell 
 source $HOME/.profile
@@ -17,6 +19,8 @@ setopt COMBINING_CHARS
 function upgrade_zsh_plugin() {
     ls $HOME/.zsh/ | grep -v scripts | xargs -I{} git -C $HOME/.zsh/{} pull
     curl https://raw.githubusercontent.com/docker/cli/master/contrib/completion/zsh/_docker > $HOME/.zsh/scripts/_docker
+    curl https://raw.githubusercontent.com/zsh-users/zsh-completions/master/src/_golang > $HOME/.zsh/scripts/_golang
+    curl https://raw.githubusercontent.com/zsh-users/zsh-completions/master/src/_httpie > $HOME/.zsh/scripts/_httpie
 }
 
 # python
@@ -25,7 +29,7 @@ export PYTHONDONTWRITEBYTECODE=1
 # awesome alias
 if ls --color > /dev/null 2>&1; then # GNU `ls`
     colorflag="--color"
-    eval "$(dircolors -b)"
+    # eval "$(dircolors -b)"
 else # OS X `ls`
     colorflag="-G"
     LS_COLORS="Gxfxcxdxbxegedabagacad"
@@ -95,3 +99,6 @@ eval "$(lua $HOME/.zsh/z.lua/z.lua  --init zsh)"
 
 # syntax-highlighting
 source $HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# direnv
+eval "$(direnv hook zsh)"
