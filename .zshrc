@@ -34,6 +34,13 @@ else # Linux `ls`
     colorflag="--color"
     eval "$(dircolors -b)"
 fi
+
+alias mkdir='mkdir -v'
+alias mv='mv -v'
+alias cp='cp -v'
+alias rm='rm -v'
+alias ln='ln -v'
+
 alias l="ls"
 alias ll="ls -alhF"
 alias ls="ls ${colorflag}"
