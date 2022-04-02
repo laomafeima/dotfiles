@@ -51,36 +51,16 @@ require('packer').startup(function()
     use { 
         'kyazdani42/nvim-tree.lua',
         config = function() require'nvim-tree'.setup {
-            auto_close          = true,
             open_on_tab         = true,
         } end,
         opt = true,
         cmd = {'NvimTreeToggle'},
     }
 
-    use 'nvim-lualine/lualine.nvim'
     use {
-        'kdheepak/tabline.nvim',
-        config = function()
-            require'tabline'.setup {
-                -- Defaults configuration options
-                enable = true,
-                options = {
-                    -- If lualine is installed tabline will use separators configured in lualine by default.
-                    -- These options can be used to override those settings.
-                    modified_icon = "+ ", -- change the default modified icon
-                }
-            }
-            vim.cmd[[
-            set guioptions-=e " Use showtabline in gui vim
-            set sessionoptions+=tabpages,globals " store tabpages and globals in session
-            ]]
-        end,
-        opt = true,
-        event = { 'TabNew' },
-        requires = { { 'nvim-lualine/lualine.nvim' } }
+        'nvim-lualine/lualine.nvim',
+        requires = { 'kyazdani42/nvim-web-devicons', opt = true }
     }
-
 
     use {
         'windwp/nvim-autopairs',

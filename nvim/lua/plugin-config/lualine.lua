@@ -1,12 +1,25 @@
 require('lualine').setup{
     options = { 
         theme = 'onedark',
-        icons_enabled = false,
-        section_separators = '',
-        component_separators = '',
     },
     extensions = {
         'quickfix',
-        'nvim-tree'
+        'nvim-tree',
+        'quickfix',
+    },
+    sections = {
+        lualine_x = {'filetype', 'encoding'},
+        lualine_y = {'%L', 'progress'},
+    },
+    tabline = {
+        lualine_a = {{ 
+            'buffers',
+            mode = 2,
+        }},
+        -- lualine_b = {'branch'},
+        -- lualine_c = {'filename'},
+        -- lualine_x = {},
+        -- lualine_y = {},
+        lualine_z = {'tabs'}
     }
 }
