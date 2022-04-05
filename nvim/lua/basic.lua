@@ -13,6 +13,7 @@ vim.opt.cursorline = true -- 突出显示当前行
 vim.cmd("highlight SignColumn guibg=none guifg=black cterm=none") -- 隐藏侧边信号栏
 vim.cmd("highlight Pmenu guibg=darkslategray ctermbg=lightgray")  -- 设置弹出菜单栏
 vim.cmd("highlight PmenuSel ctermbg=darkgray guibg=Grey cterm=bold") -- 设置菜单栏选中
+vim.cmd("highlight VertSplit  cterm=NONE term=NONE gui=NONE") -- 设置分屏线样式
 
 
 vim.cmd([[

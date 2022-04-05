@@ -9,7 +9,7 @@ require('lualine').setup{
     },
     sections = {
         lualine_x = {'filetype', 'encoding'},
-        lualine_y = {'%L', 'progress'},
+        lualine_y = {'%LL', 'progress'},
     },
     tabline = {
         lualine_a = {{ 
